@@ -2,7 +2,6 @@
 
 require_once __DIR__."/lib/TresorContainer.php";
 require_once __DIR__."/lib/TresorUserKey.php";
-require_once __DIR__."/lib/TresorGroupKey.php";
 
 class Tresor extends StudIPPlugin implements StandardPlugin, SystemPlugin {
 

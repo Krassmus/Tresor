@@ -1,10 +1,13 @@
 <?= $this->render_partial("container/_user_key.php") ?>
 
-<div id="encrypted_key" data-key="<?= htmlReady($userkey['encrypted_key']) ?>"></div>
+<div style="display: none;" id="encryption_error">
+    <?= MessageBox::error(_("Das Dokument kann leider nicht entschlüsselt werden. Vermutlich muss es erst von jemand anderem erneut gespeichert werden, damit Sie das lesen können.")) ?>
+</div>
 
 <form action="<?= PluginEngine::getLink($plugin, array(), "container/store/".$container->getId()) ?>"
       method="post"
-      class="default">
+      class="default"
+      id="content_form">
 
     <input type="hidden" name="encrypted_content" id="encrypted_content" value="<?= htmlReady($container['encrypted_content']) ?>">
     <textarea id="content"

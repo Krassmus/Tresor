@@ -1,9 +1,13 @@
 STUDIP.Tresor = {
     createUserKeys: function () {
-        jQuery("#set_password").fadeIn(300);
+        jQuery("#set_password").dialog({
+            modal: true,
+            title: jQuery("#set_password_title").text(),
+            width: 400
+        });
     },
     setPassword: function () {
-        if (jQuery("#set_password input[name=password]").val() !== jQuery("#set_password input[name=password_2]").val()) {
+        if (jQuery("#tresor_password").val() !== jQuery("#tresor_password_2").val()) {
             alert("Passwort nicht gleich.");
             return;
         }
@@ -13,28 +17,27 @@ STUDIP.Tresor = {
             userIds: [{
                 name: jQuery("#set_password input[name=user]").val(),
                 email: jQuery("#set_password input[name=mail]").val()
-            }],      // multiple user IDs possible
-            numBits: 2048,                                                 // RSA key size
-            passphrase: jQuery("#set_password input[name=password]").val() // protects the private key
+            }],
+            numBits: 2048, // RSA key size
+            passphrase: jQuery("#tresor_password").val() // protects the private key
         };
 
         openpgp.generateKey(options).then(function(key) {
-            var private_key = key.privateKeyArmored;
-            var public_key = key.publicKeyArmored;
-            sessionStorage.setItem('STUDIP.Tresor.passphrase', jQuery("#set_password input[name=password]").val());
-            jQuery("#wheel img").addClass("notpinning").removeClass("spinning");
+            var private_key = key.privateKeyArmored.replace(/\r/, "");
+            var public_key = key.publicKeyArmored.replace(/\r/, "");
+            sessionStorage.setItem('STUDIP.Tresor.passphrase', jQuery("#tresor_password").val());
+            //jQuery("#wheel img").addClass("notpinning").removeClass("spinning");
 
             jQuery.ajax({
                 url: STUDIP.ABSOLUTE_URI_STUDIP + "plugins.php/tresor/userdata/set_keys",
                 type: "post",
                 data: {
-                    'private_key': key.privateKeyArmored, // '-----BEGIN PGP PRIVATE KEY BLOCK ... '
-                    'public_key' : key.publicKeyArmored, // '-----BEGIN PGP PUBLIC KEY BLOCK ... '
+                    'private_key': private_key, // '-----BEGIN PGP PRIVATE KEY BLOCK ... '
+                    'public_key' : public_key, // '-----BEGIN PGP PUBLIC KEY BLOCK ... '
                 },
                 success: function (message_box) {
                     jQuery("#my_key").data("private_key", private_key).data("public_key", public_key);
-                    jQuery(".messagebox").replaceWith(message_box);
-                    jQuery("#set_password").fadeOut();
+                    location.reload();
                 }
             });
         });
@@ -54,7 +57,7 @@ STUDIP.Tresor = {
         };
         openpgp.encrypt(options).then(function(ciphertext) {
             console.log(ciphertext);
-            jQuery("#encrypted_content").val(ciphertext.data); // '-----BEGIN PGP MESSAGE ... END PGP MESSAGE-----'
+            jQuery("#encrypted_content").val(ciphertext.data.replace(/\r/, "")); // '-----BEGIN PGP MESSAGE ... END PGP MESSAGE-----'
             jQuery("#encrypted_content").closest("form").submit();
         });
     },
@@ -80,10 +83,12 @@ STUDIP.Tresor = {
                     message: message,  // parse armored message
                     privateKey: my_key // for decryption
                 };
-
                 openpgp.decrypt(options).then(function (plaintext) {
                     jQuery("#content").val(plaintext.data);
                     return plaintext.data; // 'Hello, World!'
+                }, function (error) {
+                    jQuery("#encryption_error").show("fade");
+                    jQuery("#content_form").hide();
                 });
             }
         }

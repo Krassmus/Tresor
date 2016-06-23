@@ -33,23 +33,6 @@ class InitPlugin extends Migration {
               PRIMARY KEY (`user_id`)
             );
         ");
-        DBManager::get()->exec("
-            CREATE TABLE `tresor_group_keys` (
-              `key_id` varchar(32) NOT NULL,
-              `user_id` varchar(32) NOT NULL,
-              `seminar_id` varchar(32) NOT NULL,
-              `statusgruppe_id` varchar(32) DEFAULT NULL,
-              `editor_user_id` varchar(32) NOT NULL,
-              `encrypted_key` text NOT NULL,
-              `chdate` int(11) NOT NULL,
-              `mkdate` int(11) NOT NULL,
-              PRIMARY KEY (`key_id`),
-              KEY `statusgruppe_id` (`statusgruppe_id`),
-              KEY `user_id` (`user_id`),
-              KEY `seminar_id` (`seminar_id`),
-              KEY `editor_user_id` (`editor_user_id`)
-            );
-        ");
     }
 	
 	public function down() {
@@ -58,9 +41,6 @@ class InitPlugin extends Migration {
         ");
         DBManager::get()->exec("
             DROP TABLE IF EXISTS `tresor_user_keys`
-        ");
-        DBManager::get()->exec("
-            DROP TABLE IF EXISTS `tresor_group_keys`
         ");
     }
 }

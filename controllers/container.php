@@ -14,6 +14,9 @@ class ContainerController extends PluginController {
     }
 
     public function index_action() {
+        if ($GLOBALS['perm']->have_perm("admin")) {
+            PageLayout::postMessage(MessageBox::success(_("Sie sind Admin oder Root. Die vorliegenden Daten sind nicht für Sie verschlüsselt.")));
+        }
         $this->coursecontainer = TresorContainer::findBySQL("seminar_id = ? ORDER BY name", array($_SESSION['SessionSeminar']));
     }
 
@@ -22,10 +25,6 @@ class ContainerController extends PluginController {
         if (!$GLOBALS['perm']->have_studip_perm("autor", $this->container['seminar_id'])) {
             throw new AccessDeniedException();
         }
-        $this->userkey = TresorGroupKey::findOneBySQL("user_id = ? AND seminar_id = ?", array(
-            $GLOBALS['user']->id,
-            $this->container['seminar_id']
-        ));
         $this->foreign_user_public_keys = TresorUserKey::findForSeminar($this->container['seminar_id']);
     }
 

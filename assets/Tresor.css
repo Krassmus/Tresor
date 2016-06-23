@@ -4,7 +4,7 @@
 }
 #wheel img {
     position: absolute;
-    left: 350px;
+    left: 180px;
     opacity: 0.25;
     transition: opacity .25s ease-in-out;
     -webkit-animation-play-state: paused;
