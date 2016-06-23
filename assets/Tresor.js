@@ -95,10 +95,17 @@ STUDIP.Tresor = {
     },
     askForPassphrase: function (wrong) {
         sessionStorage.setItem("STUDIP.Tresor.passphrase", "");
+        jQuery("#question_passphrase [name=passphrase]").val("");
+        jQuery("#question_passphrase .wrong").hide();
         jQuery("#question_passphrase").dialog({
             title: jQuery("#question_passphrase_title").text(),
-            modal: true
+            modal: true,
+            width: 400
         });
+        jQuery("#question_passphrase [name=passphrase]").focus();
+        if (wrong) {
+            jQuery("#question_passphrase .wrong").show("fade");
+        }
     },
 
     extractPrivateKey: function () {

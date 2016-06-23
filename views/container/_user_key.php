@@ -7,7 +7,7 @@
 
     <div id="set_password_title" style="display: none;"><?= _("Wählen Sie ein sicheres Passwort aus") ?></div>
     <div id="set_password" style="display: none;">
-        <form class="default" onSubmit="STUDIP.Tresor.setPassword(); return false;">
+        <form class="default" action="?" method="post" onSubmit="STUDIP.Tresor.setPassword(); return false;">
             <div id="wheel">
                 <img src="<?= $plugin->getPluginURL() ?>/assets/settings.svg" width="40px" heigh="40px">
             </div>
@@ -38,7 +38,8 @@
 <? endif ?>
 <div style="display: none;" id="question_passphrase_title"><?= _("Passwort zum Entschlüsseln eingeben") ?></div>
 <div style="display: none;" id="question_passphrase">
-    <form class="default">
+    <form class="default" onSubmit="STUDIP.Tresor.extractPrivateKey(); return false;" action="?" method="post">
+        <div class="wrong"><?= MessageBox::error(_("Falsches Passwort. Einfach nochmal probieren.")) ?></div>
         <label>
             <?= _("Passwort zum Entschlüsseln") ?>
             <input type="password" name="passphrase">

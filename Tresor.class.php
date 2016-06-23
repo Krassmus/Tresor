@@ -8,9 +8,8 @@ class Tresor extends StudIPPlugin implements StandardPlugin, SystemPlugin {
     public function __construct()
     {
         parent::__construct();
-        if (User::findCurrent()->id === "nobody") {
-            die("k,hh");
-            PageLayout::addHeadElement("script", array(), 'sessionStorage.setItem("STUDIP.Tresor.passphrase");');
+        if ($GLOBALS['user']->id === "nobody") {
+            PageLayout::addHeadElement("script", array(), 'sessionStorage.setItem("STUDIP.Tresor.passphrase", "");');
         }
     }
 
