@@ -1,0 +1,32 @@
+#wheel {
+    min-height: 42px;
+    padding-top: 10px;
+}
+#wheel img {
+    position: absolute;
+    left: 350px;
+    opacity: 0.25;
+    transition: opacity .25s ease-in-out;
+    -webkit-animation-play-state: paused;
+    -moz-animation-play-state: paused;
+    -o-animation-play-state: paused;
+    animation-play-state: paused;
+}
+#wheel img.spinning {
+    opacity: 0.5;
+    transition: opacity .25s ease-in-out;
+    -webkit-animation:spin 8s linear infinite;
+    -moz-animation:spin 8s linear infinite;
+    animation:spin 8s linear infinite;
+}
+#wheel img.notspinning {
+    opacity: 0.25;
+    transition: opacity .25s ease-in-out;
+    -webkit-animation-play-state: paused;
+    -moz-animation-play-state: paused;
+    -o-animation-play-state: paused;
+    animation-play-state: paused;
+}
+@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }

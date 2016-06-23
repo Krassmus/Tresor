@@ -13,7 +13,11 @@
     <? if (count($coursecontainer)) : ?>
         <? foreach ($coursecontainer as $container) : ?>
             <tr>
-                <td><?= htmlReady($container['name'])  ?></td>
+                <td>
+                    <a href="<?= PluginEngine::getLink($plugin, array(), "container/details/".$container->getId()) ?>">
+                        <?= htmlReady($container['name'])  ?>
+                    </a>
+                </td>
                 <td><?= _("keine") ?></td>
                 <td><?= date("j.n.Y", $container['chdate']) ?></td>
                 <td><?= htmlReady(get_fullname($container['last_user_id'])) ?></td>
