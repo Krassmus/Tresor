@@ -26,6 +26,7 @@
         <?= \Studip\LinkButton::create(_("Passwort setzen"), "#", array('onClick' => "STUDIP.Tresor.setPassword(); return false;")) ?>
     </form>
 <? endif ?>
+<div style="display: none;" id="question_passphrase_title"><?= _("Passwort zum Entschlüsseln eingeben") ?></div>
 <div style="display: none;" id="question_passphrase">
     <form class="default">
         <label>

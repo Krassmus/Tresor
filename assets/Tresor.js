@@ -89,17 +89,28 @@ STUDIP.Tresor = {
         }
     },
     askForPassphrase: function (wrong) {
-
+        sessionStorage.setItem("STUDIP.Tresor.passphrase", "");
+        jQuery("#question_passphrase").dialog({
+            title: jQuery("#question_passphrase_title").text(),
+            modal: true
+        });
     },
 
     extractPrivateKey: function () {
         var passphrase = jQuery("#question_passphrase [name=passphrase]").val();
         //Private Key
-
-        sessionStorage.setItem("STUDIP.Tresor.passphrase")
+        var my_key = jQuery("#my_key").data("private_key");
+        my_key = openpgp.key.readArmored(my_key);
+        my_key = my_key.keys[0];
+        var success = my_key.decrypt(passphrase);
+        if (!success) {
+            //ask for passphrase:
+            STUDIP.Tresor.askForPassphrase(true);
+            return;
+        } else {
+            sessionStorage.setItem("STUDIP.Tresor.passphrase", passphrase);
+            jQuery("#question_passphrase").dialog("close");
+            STUDIP.Tresor.decryptContainer();
+        }
     }
 };
-
-jQuery(function () {
-
-});
