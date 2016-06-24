@@ -10,6 +10,7 @@ class ContainerController extends PluginController {
         Navigation::activateItem("/course/tresor");
         PageLayout::addScript($this->plugin->getPluginURL()."/assets/Tresor.js");
         PageLayout::addScript($this->plugin->getPluginURL()."/assets/openpgp.js");
+        PageLayout::addScript("jquery/jquery.tablesorter-2.22.5.js");
         PageLayout::addStylesheet($this->plugin->getPluginURL()."/assets/Tresor.css");
     }
 
@@ -34,6 +35,7 @@ class ContainerController extends PluginController {
             throw new AccessDeniedException();
         }
         if (Request::isPost()) {
+            $this->container['name'] = Request::get("name");
             $this->container['encrypted_content'] = Request::get("encrypted_content");
             $this->container['last_user_id'] = User::findCurrent()->id;
             $this->container->store();
@@ -53,6 +55,18 @@ class ContainerController extends PluginController {
             $this->container->store();
             PageLayout::postSuccess(_("Neuen Text initialisiert"));
             $this->redirect("container/details/".$this->container->getId());
+        }
+    }
+
+    public function delete_action($tresor_id) {
+        if (Request::isPost()) {
+            $this->container = new TresorContainer($tresor_id);
+            if (!$GLOBALS['perm']->have_studip_perm("tutor", $this->container['seminar_id'])) {
+                throw new AccessDeniedException();
+            }
+            $this->container->delete();
+            PageLayout::postSuccess(_("Text wurde gelöscht."));
+            $this->redirect("container/index");
         }
     }
 

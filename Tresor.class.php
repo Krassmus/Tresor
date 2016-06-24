@@ -15,7 +15,17 @@ class Tresor extends StudIPPlugin implements StandardPlugin, SystemPlugin {
 
     function getIconNavigation($course_id, $last_visit, $user_id) {
         $icon = new Navigation(_("Tresor"), PluginEngine::getURL($this, array(), "container/index"));
-        $icon->setImage(Icon::create("lock-locked", "inactive"), array('title' => _("Tresor")));
+        $new_container = TresorContainer::countBySQL("seminar_id = :course_id AND chdate > :last_visit AND last_user_id != :user_id", array(
+            'course_id' => $course_id,
+            'last_visit' => $last_visit,
+            'user_id' => $GLOBALS['user']->id
+        ));
+        if ($new_container > 0) {
+            $icon->setURL(PluginEngine::getURL($this, array('highlight' => $last_visit), "container/index"));
+            $icon->setImage(Icon::create("lock-locked", "new"), array('title' => sprintf(_("Tresor - %s Änderungen"), $new_container)));
+        } else {
+            $icon->setImage(Icon::create("lock-locked", "inactive"), array('title' => _("Tresor")));
+        }
         return $icon;
     }
 

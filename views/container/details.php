@@ -9,6 +9,8 @@
       class="default"
       id="content_form">
 
+    <input type="text" name="name" value="<?= htmlReady($container['name']) ?>">
+
     <input type="hidden" name="encrypted_content" id="encrypted_content" value="<?= htmlReady($container['encrypted_content']) ?>">
     <textarea id="content"
               style="width: calc(100% - 20px); height: calc(100vh - 90px);"
