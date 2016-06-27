@@ -12,6 +12,9 @@
     <input type="text" name="name" value="<?= htmlReady($container['name']) ?>">
 
     <input type="hidden" name="encrypted_content" id="encrypted_content" value="<?= htmlReady($container['encrypted_content']) ?>">
+
+    <input type="hidden" name="mime_type" value="text/plain">
+
     <textarea id="content"
               style="width: calc(100% - 20px); height: calc(100vh - 90px);"
               placeholder="<?= $container['encrypted_content'] ? _("Es wird entschlüsselt ...") : _("Text eingeben ...") ?>"></textarea>
@@ -24,8 +27,14 @@
         jQuery(STUDIP.Tresor.decryptContainer);
     </script>
 
-    <div>
-        <?= \Studip\LinkButton::create(_("Speichern"), "#", array('onClick' => "STUDIP.Tresor.storeContainer(); return false;")) ?>
-    </div>
 </form>
+
+
+<div>
+    <label>
+        <input type="file" id="file_upload" onChange="STUDIP.Tresor.selectFile(event);">
+        <?= _("Datei hochladen") ?>
+    </label>
+    <?= \Studip\LinkButton::create(_("Speichern"), "#", array('onClick' => "STUDIP.Tresor.storeContainer(); return false;")) ?>
+</div>
 

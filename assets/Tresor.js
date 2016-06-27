@@ -42,6 +42,35 @@ STUDIP.Tresor = {
             });
         });
     },
+    selectFile: function (event) {
+        var file = event.target.files[0];
+        var reader = new FileReader();
+        reader.onload = function(event) {
+            var file_source = event.target.result;
+
+            var keys = [];
+            for (var i in STUDIP.Tresor.keyToEncryptFor) {
+                var publicKey = openpgp.key.readArmored(STUDIP.Tresor.keyToEncryptFor[i]);
+                keys.push(publicKey.keys[0]);
+            }
+
+            var options = {
+                data: file_source,     // input as String (or Uint8Array)
+                publicKeys: keys,  // for encryption
+            };
+            var time = new Date();
+            openpgp.encrypt(options).then(function(ciphertext) {
+                jQuery("#encrypted_content").val(ciphertext.data.replace(/\r/, "")); // '-----BEGIN PGP MESSAGE ... END PGP MESSAGE-----'
+                jQuery("#content_form [name=mime_type]").val(file.type);
+                console.log(file.type);
+                var new_time = new Date();
+                console.log(new_time - time);
+                //jQuery("#encrypted_content").closest("form").submit();
+            });
+
+        };
+        reader.readAsBinaryString(file);
+    },
     storeContainer: function () {
         var content = jQuery("#content").val();
 
@@ -56,7 +85,6 @@ STUDIP.Tresor = {
             publicKeys: keys,  // for encryption
         };
         openpgp.encrypt(options).then(function(ciphertext) {
-            console.log(ciphertext);
             jQuery("#encrypted_content").val(ciphertext.data.replace(/\r/, "")); // '-----BEGIN PGP MESSAGE ... END PGP MESSAGE-----'
             jQuery("#encrypted_content").closest("form").submit();
         });
