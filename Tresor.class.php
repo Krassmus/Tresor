@@ -11,6 +11,12 @@ class Tresor extends StudIPPlugin implements StandardPlugin, SystemPlugin {
         if ($GLOBALS['user']->id === "nobody") {
             PageLayout::addHeadElement("script", array(), 'sessionStorage.setItem("STUDIP.Tresor.passphrase", "");');
         }
+        if ($GLOBALS['perm']->have_perm("autor") && !$GLOBALS['perm']->have_perm("admin")) {
+            $navigation = new Navigation(_("Tresor"), PluginEngine::getURL($this, array(), "userdata/settings"));
+            if (Navigation::hasItem("/profile/settings")) {
+                Navigation::addItem("/profile/settings/tresor", $navigation);
+            }
+        }
     }
 
     function getIconNavigation($course_id, $last_visit, $user_id) {

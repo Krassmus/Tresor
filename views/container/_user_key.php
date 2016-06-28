@@ -32,6 +32,8 @@
             <input type="hidden" name="synchronously_encrypted_private_key">
             <input type="hidden" name="public_key">
 
+            <div style="display: none;"><input type="submit"></div>
+
             <?= \Studip\LinkButton::create(_("Passwort setzen"), "#", array('onClick' => "STUDIP.Tresor.setPassword(); return false;")) ?>
         </form>
     </div>

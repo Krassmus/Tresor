@@ -36,6 +36,7 @@ class ContainerController extends PluginController {
         }
         if (Request::isPost()) {
             $this->container['name'] = Request::get("name");
+            $this->container['mime_type'] = Request::get("mime_type", "text/plain");
             $this->container['encrypted_content'] = Request::get("encrypted_content");
             $this->container['last_user_id'] = User::findCurrent()->id;
             $this->container->store();

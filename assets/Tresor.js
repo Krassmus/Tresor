@@ -58,18 +58,26 @@ STUDIP.Tresor = {
                 data: file_source,     // input as String (or Uint8Array)
                 publicKeys: keys,  // for encryption
             };
+            console.log(options);
             var time = new Date();
             openpgp.encrypt(options).then(function(ciphertext) {
                 jQuery("#encrypted_content").val(ciphertext.data.replace(/\r/, "")); // '-----BEGIN PGP MESSAGE ... END PGP MESSAGE-----'
+                jQuery("#content_form [name=name]").val(file.name);
                 jQuery("#content_form [name=mime_type]").val(file.type);
+                jQuery("#content_form").addClass("file").removeClass("text");
+                jQuery("#content").val("");
+
                 console.log(file.type);
                 var new_time = new Date();
                 console.log(new_time - time);
-                //jQuery("#encrypted_content").closest("form").submit();
+                jQuery("#encrypted_content").closest("form").submit();
             });
 
         };
-        reader.readAsBinaryString(file);
+        reader.readAsDataURL(file);
+    },
+    selectText: function() {
+        jQuery("#content_form").removeClass("file").addClass("text");
     },
     storeContainer: function () {
         var content = jQuery("#content").val();
@@ -84,7 +92,7 @@ STUDIP.Tresor = {
             data: content,     // input as String (or Uint8Array)
             publicKeys: keys,  // for encryption
         };
-        openpgp.encrypt(options).then(function(ciphertext) {
+        openpgp.encrypt(options).then(function (ciphertext) {
             jQuery("#encrypted_content").val(ciphertext.data.replace(/\r/, "")); // '-----BEGIN PGP MESSAGE ... END PGP MESSAGE-----'
             jQuery("#encrypted_content").closest("form").submit();
         });
@@ -97,6 +105,7 @@ STUDIP.Tresor = {
                 STUDIP.Tresor.askForPassphrase(false);
             } else {
                 var my_key = jQuery("#my_key").data("private_key");
+                console.log(jQuery("#encrypted_content").val());
                 my_key = openpgp.key.readArmored(my_key);
                 my_key = my_key.keys[0];
                 var success = my_key.decrypt(passphrase);
@@ -112,8 +121,9 @@ STUDIP.Tresor = {
                     privateKey: my_key // for decryption
                 };
                 openpgp.decrypt(options).then(function (plaintext) {
+                    console.log(plaintext);
                     jQuery("#content").val(plaintext.data);
-                    return plaintext.data; // 'Hello, World!'
+                    return plaintext.data;
                 }, function (error) {
                     jQuery("#encryption_error").show("fade");
                     jQuery("#content_form").hide();

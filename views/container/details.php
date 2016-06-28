@@ -6,18 +6,25 @@
 
 <form action="<?= PluginEngine::getLink($plugin, array(), "container/store/".$container->getId()) ?>"
       method="post"
-      class="default"
+      class="default <?= $container['mime_type'] ? "file" : "text" ?>"
       id="content_form">
 
     <input type="text" name="name" value="<?= htmlReady($container['name']) ?>">
 
     <input type="hidden" name="encrypted_content" id="encrypted_content" value="<?= htmlReady($container['encrypted_content']) ?>">
 
-    <input type="hidden" name="mime_type" value="text/plain">
+    <input type="hidden" name="mime_type" value="text/plain" value="<?= htmlReady($container['mime_type']) ?>">
 
     <textarea id="content"
+              class="onlytext"
               style="width: calc(100% - 20px); height: calc(100vh - 90px);"
               placeholder="<?= $container['encrypted_content'] ? _("Es wird entschlüsselt ...") : _("Text eingeben ...") ?>"></textarea>
+
+    <div class="onlyfile">
+        <a href="">
+            <?= Icon::create("download", "clickable")->asImg("60px") ?>
+        </a>
+    </div>
 
     <script>
         STUDIP.Tresor.keyToEncryptFor = <?= json_encode(studip_utf8encode(array_map(
@@ -31,10 +38,12 @@
 
 
 <div>
-    <label>
-        <input type="file" id="file_upload" onChange="STUDIP.Tresor.selectFile(event);">
-        <?= _("Datei hochladen") ?>
-    </label>
+
+    <input type="file" id="file_upload" onChange="STUDIP.Tresor.selectFile(event);" style="display: none;">
+    <?= \Studip\LinkButton::create(_("Datei hochladen"), "#", array('onClick' => "jQuery('#file_upload').trigger('click'); return false;")) ?>
+
+    <?= \Studip\LinkButton::create(_("Text eingeben"), "#", array('onClick' => "STUDIP.Tresor.selectFile(); return false;")) ?>
+
     <?= \Studip\LinkButton::create(_("Speichern"), "#", array('onClick' => "STUDIP.Tresor.storeContainer(); return false;")) ?>
 </div>
 
