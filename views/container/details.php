@@ -21,7 +21,7 @@
               placeholder="<?= $container['encrypted_content'] ? _("Es wird entschlüsselt ...") : _("Text eingeben ...") ?>"></textarea>
 
     <div class="onlyfile">
-        <a href="">
+        <a href="" onClick="STUDIP.Tresor.downloadFile(); return false;">
             <?= Icon::create("download", "clickable")->asImg("60px") ?>
         </a>
     </div>

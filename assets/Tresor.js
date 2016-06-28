@@ -76,6 +76,50 @@ STUDIP.Tresor = {
         };
         reader.readAsDataURL(file);
     },
+    downloadFile: function () {
+        if (jQuery("#encrypted_content").val()) {
+            var passphrase = sessionStorage.getItem("STUDIP.Tresor.passphrase");
+            if (!passphrase) {
+                STUDIP.Tresor.askForPassphrase(false);
+            } else {
+                var my_key = jQuery("#my_key").data("private_key");
+                console.log(jQuery("#encrypted_content").val());
+                my_key = openpgp.key.readArmored(my_key);
+                my_key = my_key.keys[0];
+                var success = my_key.decrypt(passphrase);
+                if (!success) {
+                    //ask for passphrase:
+                    STUDIP.Tresor.askForPassphrase(false);
+                    return;
+                }
+                var message = openpgp.message.readArmored(jQuery("#encrypted_content").val());
+
+                options = {
+                    message: message,  // parse armored message
+                    privateKey: my_key // for decryption
+                };
+                openpgp.decrypt(options).then(function (plaintext) {
+
+                    var element = document.createElement('a');
+                    element.setAttribute('href', plaintext.data);
+                    element.setAttribute('download', jQuery("#content_form [name=name]").val());
+
+                    element.style.display = 'none';
+                    document.body.appendChild(element);
+
+                    element.click();
+
+                    document.body.removeChild(element);
+
+                    //jQuery("#content").val(plaintext.data);
+                    return plaintext.data;
+                }, function (error) {
+                    jQuery("#encryption_error").show("fade");
+                    jQuery("#content_form").hide();
+                });
+            }
+        }
+    },
     selectText: function() {
         jQuery("#content_form").removeClass("file").addClass("text");
     },
