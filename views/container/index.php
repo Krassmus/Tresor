@@ -60,7 +60,7 @@
 
 $actions = new ActionsWidget();
 if ($my_key) {
-    $actions->addLink(_("Text hinzufügen"), PluginEngine::getURL($plugin, array(), "container/create"), Icon::create("add", "info"), array('data-dialog' => 1));
+    $actions->addLink(_("Dokument hinzufügen"), PluginEngine::getURL($plugin, array(), "container/create"), Icon::create("add", "info"), array('data-dialog' => 1));
 } else {
     $actions->addLink(_("Persönlichen Schlüssel erstellen"), "#", Icon::create("key+add", "info"), array('onClick' => "STUDIP.Tresor.createUserKeys(); return false;"));
 }

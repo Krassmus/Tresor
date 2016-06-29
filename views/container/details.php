@@ -6,7 +6,7 @@
 
 <form action="<?= PluginEngine::getLink($plugin, array(), "container/store/".$container->getId()) ?>"
       method="post"
-      class="default <?= $container['mime_type'] ? "file" : "text" ?>"
+      class="default <?= $container['mime_type'] && $container['mime_type'] !== "text/plain" ? "file" : "text" ?>"
       id="content_form">
 
     <input type="text" name="name" value="<?= htmlReady($container['name']) ?>">
@@ -42,7 +42,7 @@
     <input type="file" id="file_upload" onChange="STUDIP.Tresor.selectFile(event);" style="display: none;">
     <?= \Studip\LinkButton::create(_("Datei hochladen"), "#", array('onClick' => "jQuery('#file_upload').trigger('click'); return false;")) ?>
 
-    <?= \Studip\LinkButton::create(_("Text eingeben"), "#", array('onClick' => "STUDIP.Tresor.selectFile(); return false;")) ?>
+    <?= \Studip\LinkButton::create(_("Text eingeben"), "#", array('onClick' => "STUDIP.Tresor.selectText(); return false;")) ?>
 
     <?= \Studip\LinkButton::create(_("Speichern"), "#", array('onClick' => "STUDIP.Tresor.storeContainer(); return false;")) ?>
 </div>

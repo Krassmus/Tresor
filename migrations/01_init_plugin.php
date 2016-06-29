@@ -15,7 +15,6 @@ class InitPlugin extends Migration {
               `last_user_id` varchar(32) NOT NULL,
               `name` varchar(128) NOT NULL,
               `mime_type` varchar(64) NOT NULL DEFAULT 'text/plain',
-              `encrypted_content` text NOT NULL,
               `chdate` int NOT NULL,
               `mkdate` int NOT NULL,
               PRIMARY KEY (`tresor_id`),
