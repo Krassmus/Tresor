@@ -16,7 +16,7 @@ class ContainerController extends PluginController {
 
     public function index_action() {
         if ($GLOBALS['perm']->have_perm("admin")) {
-            PageLayout::postMessage(MessageBox::success(_("Sie sind Admin oder Root. Die vorliegenden Daten sind nicht für Sie verschlüsselt.")));
+            PageLayout::postMessage(MessageBox::info(_("Sie sind Admin und nicht Mitglied dieser Veranstaltung. Die vorliegenden Dokumente sind nicht für Sie verschlüsselt.")));
         }
         $this->coursecontainer = TresorContainer::findBySQL("seminar_id = ? ORDER BY name", array($_SESSION['SessionSeminar']));
     }
