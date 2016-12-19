@@ -38,8 +38,8 @@ class Tresor extends StudIPPlugin implements StandardPlugin, SystemPlugin {
 
     function getTabNavigation($course_id) {
         $tab = new Navigation(_("Tresor"), PluginEngine::getURL($this, array(), "container/index"));
-        $tab->setImage(Icon::create("lock-locked", "info_alt")->asImagePath());
-        $tab->setActiveImage(Icon::create("lock-locked", "info")->asImagePath());
+        $tab->setImage(Icon::create("lock-locked", "info_alt"));
+        $tab->setActiveImage(Icon::create("lock-locked", "info"));
         return array('tresor' => $tab);
     }
 
