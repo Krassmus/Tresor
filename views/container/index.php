@@ -20,14 +20,14 @@
                         <?= Icon::create("star", "new")->asImg("20px", array('class' => "text-bottom", 'title' => _("Neu oder verändert."))) ?>
                     <? endif ?>
                     <? if (!$GLOBALS['perm']->have_perm("admin") && $my_key) : ?>
-                    <a href="<?= PluginEngine::getLink($plugin, array(), "container/details/".$container->getId()) ?>">
-                        <?= Icon::create("lock-unlocked", "clickable")->asImg("20px", array('class' => "text-bottom")) ?>
+                        <a href="<?= PluginEngine::getLink($plugin, array(), "container/details/".$container->getId()) ?>" data-dialog>
+                            <?= Icon::create("lock-unlocked", "clickable")->asImg("20px", array('class' => "text-bottom")) ?>
                     <? else : ?>
                         <?= Icon::create("lock-locked", "info")->asImg("20px", array('class' => "text-bottom")) ?>
                     <? endif ?>
-                        <?= htmlReady($container['name'])  ?>
+                    <?= htmlReady($container['name'])  ?>
                     <? if (!$GLOBALS['perm']->have_perm("admin") && $my_key) : ?>
-                    </a>
+                        </a>
                     <? endif ?>
                 </td>
                 <td><?= date("j.n.Y", $container['chdate']) ?></td>
@@ -35,7 +35,9 @@
                 <td>
                     <? if ($GLOBALS['perm']->have_studip_perm("tutor", $_SESSION['SessionSeminar'])) : ?>
                         <form action="<?= PluginEngine::getLink($plugin, array(), "container/delete/".$container->getId()) ?>" method="post">
-                            <button style="border: none; background: none; cursor: pointer;" onClick="return window.confirm('<?= _("Wirklich löschen?") ?>');">
+                            <button
+                                style="border: none; background: none; cursor: pointer;"
+                                onClick="return window.confirm('<?= _("Wirklich löschen?") ?>');">
                                 <?= Icon::create("trash", "clickable")->asImg("20px") ?>
                             </button>
                         </form>
@@ -50,21 +52,45 @@
     <? endif ?>
     </tbody>
 </table>
+
 <script>
     jQuery(function () {
         jQuery("table.sortable").tablesorter();
+        STUDIP.Tresor.keyToEncryptFor = <?= json_encode(studip_utf8encode(array_map(
+            function ($key) { return $key['public_key']; },
+            $foreign_user_public_keys
+        ))) ?>;
     });
 </script>
+
+
+<form action="<?= PluginEngine::getLink($plugin, array(), "container/store") ?>"
+      method="post"
+      id="uploadform"
+      style="display: none;">
+    <input type="text" name="name" value="">
+    <input type="hidden" name="encrypted_content" value="">
+    <input type="hidden" name="mime_type" value="text/plain">
+</form>
+
+
+<input type="file" id="fileupload" onChange="STUDIP.Tresor.uploadFile(event);" style="display: none;">
 
 <?
 
 $actions = new ActionsWidget();
 if ($my_key) {
     $actions->addLink(
-        _("Dokument hinzufügen"),
+        _("Text hinzufügen"),
         PluginEngine::getURL($plugin, array(), "container/create"),
         Icon::create("add", "info"),
         array('data-dialog' => 1)
+    );
+    $actions->addLink(
+        _("Datei hochladen"),
+        PluginEngine::getURL($plugin, array(), "container/create_file"),
+        Icon::create("file+add", "info"),
+        array('onclick' => "jQuery('#fileupload').trigger('click'); return false;")
     );
 } else {
     $actions->addLink(

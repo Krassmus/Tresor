@@ -7,7 +7,8 @@
 <form action="<?= PluginEngine::getLink($plugin, array(), "container/store/".$container->getId()) ?>"
       method="post"
       class="default <?= $container['mime_type'] && $container['mime_type'] !== "text/plain" ? "file" : "text" ?>"
-      id="content_form">
+      id="content_form"
+      data-dialog>
 
     <input type="text" name="name" value="<?= htmlReady($container['name']) ?>">
 
@@ -21,9 +22,12 @@
               placeholder="<?= $container['encrypted_content'] ? _("Es wird entschlüsselt ...") : _("Text eingeben ...") ?>"></textarea>
 
     <div class="onlyfile">
-        <a href="" onClick="STUDIP.Tresor.downloadFile(); return false;">
-            <?= Icon::create("download", "clickable")->asImg("60px") ?>
-        </a>
+        <div class="image"></div>
+        <div>
+            <a href="#" onClick="STUDIP.Tresor.downloadFile(); return false;">
+                <?= Icon::create("download", "clickable")->asImg("60px") ?>
+            </a>
+        </div>
     </div>
 
     <script>
@@ -37,13 +41,15 @@
 </form>
 
 
-<div>
+<div data-dialog-button>
 
     <input type="file" id="file_upload" onChange="STUDIP.Tresor.selectFile(event);" style="display: none;">
-    <?= \Studip\LinkButton::create(_("Datei hochladen"), "#", array('onClick' => "jQuery('#file_upload').trigger('click'); return false;")) ?>
 
-    <?= \Studip\LinkButton::create(_("Text eingeben"), "#", array('onClick' => "STUDIP.Tresor.selectText(); return false;")) ?>
-
+    <? if ($container['mime_type'] && $container['mime_type'] !== "text/plain") : ?>
+        <?= \Studip\LinkButton::create(_("Datei hochladen"), "#", array('onClick' => "jQuery('#file_upload').trigger('click'); return false;")) ?>
+    <? else : ?>
+        <?= \Studip\LinkButton::create(_("Text eingeben"), "#", array('onClick' => "STUDIP.Tresor.selectText(); return false;")) ?>
+    <? endif ?>
     <?= \Studip\LinkButton::create(_("Speichern"), "#", array('onClick' => "STUDIP.Tresor.storeContainer(); return false;")) ?>
 </div>
 

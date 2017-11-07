@@ -38,3 +38,6 @@
 #content_form.file .onlytext {
     display: none;
 }
+.ui-dialog.ui-front {
+    z-index: 1007;
+}

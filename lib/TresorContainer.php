@@ -35,6 +35,4 @@ class TresorContainer extends SimpleORMap {
         return self::getDataPath()."/".$this->getId();
     }
 
-
-
 }

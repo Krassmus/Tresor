@@ -74,6 +74,35 @@ STUDIP.Tresor = {
         };
         reader.readAsDataURL(file);
     },
+    uploadFile: function (event) {
+        var file = event.target.files[0];
+        var reader = new FileReader();
+        reader.onload = function(event) {
+            var file_source = event.target.result;
+
+            var keys = [];
+            for (var i in STUDIP.Tresor.keyToEncryptFor) {
+                var publicKey = openpgp.key.readArmored(STUDIP.Tresor.keyToEncryptFor[i]);
+                keys.push(publicKey.keys[0]);
+            }
+
+            var options = {
+                data: file_source,     // input as String (or Uint8Array)
+                publicKeys: keys,  // for encryption
+            };
+            var time = new Date();
+            openpgp.encrypt(options).then(function(ciphertext) {
+                jQuery("#uploadform input[name=encrypted_content]").val(ciphertext.data.replace(/\r/, "")); // '-----BEGIN PGP MESSAGE ... END PGP MESSAGE-----'
+                jQuery("#uploadform [name=name]").val(file.name);
+                jQuery("#uploadform [name=mime_type]").val(file.type);
+                jQuery("#content").val("");
+
+                var new_time = new Date();
+                jQuery("#uploadform").submit();
+            });
+        };
+        reader.readAsDataURL(file);
+    },
     downloadFile: function () {
         if (jQuery("#encrypted_content").val()) {
             var passphrase = sessionStorage.getItem("STUDIP.Tresor.passphrase");
@@ -170,17 +199,23 @@ STUDIP.Tresor = {
     },
     askForPassphrase: function (wrong) {
         sessionStorage.setItem("STUDIP.Tresor.passphrase", "");
-        jQuery("#question_passphrase [name=passphrase]").val("");
-        jQuery("#question_passphrase .wrong").hide();
-        jQuery("#question_passphrase").dialog({
-            title: jQuery("#question_passphrase_title").text(),
-            modal: true,
-            width: 400
-        });
-        jQuery("#question_passphrase [name=passphrase]").focus();
-        if (wrong) {
-            jQuery("#question_passphrase .wrong").show("fade");
-        }
+        window.setTimeout(function () {
+            jQuery("#question_passphrase [name=passphrase]").val("");
+            jQuery("#question_passphrase .wrong").hide();
+            jQuery("#question_passphrase").dialog({
+                title: jQuery("#question_passphrase_title").text(),
+                modal: true,
+                width: 400,
+                classes: {
+                    "ui-dialog": "front"
+                }
+            });
+            jQuery("#question_passphrase [name=passphrase]").focus();
+            if (wrong) {
+                jQuery("#question_passphrase .wrong").show("fade");
+            }
+        }, 150);
+
     },
 
     extractPrivateKey: function () {
