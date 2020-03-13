@@ -2,7 +2,8 @@
 
 class TresorContainer extends SimpleORMap {
 
-    static public function getDataPath() {
+    static public function getDataPath()
+    {
         return $GLOBALS['STUDIP_BASE_PATH'] . "/data/tresor";
     }
 
@@ -13,7 +14,7 @@ class TresorContainer extends SimpleORMap {
             'get' => "getEncryptedContent",
             'set' => "setEncryptedContent"
         );
-        $config['additional_fields']['forum_thread_url']['get'] = 'getForumThreadURL';
+        $config['registered_callbacks']['after_delete'][] = 'deleteDataFile';
         parent::configure($config);
     }
 
@@ -33,6 +34,16 @@ class TresorContainer extends SimpleORMap {
             $this->setId($this->getNewId());
         }
         return self::getDataPath()."/".$this->getId();
+    }
+
+    public function deloreanGetFilePath()
+    {
+        return $this->getFilePath();
+    }
+
+    public function deleteDataFile()
+    {
+        return @unlink($this->getFilePath());
     }
 
 }
