@@ -18,9 +18,9 @@ class UserdataController extends PluginController {
             $userkey['synchronously_encrypted_private_key'] = preg_replace("/\r/", "", Request::get("private_key"));
             $userkey['public_key'] = preg_replace("/\r/", "", Request::get("public_key"));
             $userkey->store();
-            PageLayout::postMessage(MessageBox::success(_("Schl¸ssel erfolgreich erstellt. Vergessen Sie Ihr Passwort nicht!")));
+            PageLayout::postMessage(MessageBox::success(_("Schl√ºssel erfolgreich erstellt. Vergessen Sie Ihr Passwort nicht!")));
         }
-        $this->render_text(MessageBox::success(_("Schl¸ssel erfolgreich erstellt. Vergessen Sie Ihr Passwort nicht!")));
+        $this->render_text(MessageBox::success(_("Schl√ºssel erfolgreich erstellt. Vergessen Sie Ihr Passwort nicht!")));
     }
 
     public function settings_action() {

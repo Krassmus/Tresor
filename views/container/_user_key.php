@@ -3,9 +3,9 @@
      data-private_key="<?= htmlReady($my_key['synchronously_encrypted_private_key']) ?>"
      data-public_key="<?= htmlReady($my_key['public_key']) ?>"></div>
 <? if (!$my_key && !$GLOBALS['perm']->have_perm("admin")) : ?>
-    <?= MessageBox::info(sprintf(_("Sie haben noch keinen Schlüssel. %sJetzt erstellen.%s"), '<a href="" onClick="STUDIP.Tresor.createUserKeys(); return false;">', '</a>')) ?>
+    <? PageLayout::postMessage(MessageBox::info(sprintf(_("Sie haben noch keinen SchlÃ¼ssel fÃ¼r den Tresor. %sJetzt erstellen.%s"), '<a href="" onClick="STUDIP.Tresor.createUserKeys(); return false;">', '</a>'))) ?>
 
-    <div id="set_password_title" style="display: none;"><?= _("Wählen Sie ein sicheres Passwort aus") ?></div>
+    <div id="set_password_title" style="display: none;"><?= _("WÃ¤hlen Sie ein sicheres Passwort aus") ?></div>
     <div id="set_password" style="display: none;">
         <form class="default" action="?" method="post" onSubmit="STUDIP.Tresor.setPassword(); return false;">
             <div id="wheel">
@@ -13,7 +13,7 @@
             </div>
 
             <label>
-                <?= _("Passwort für Ihren Tresorschlüssel (nicht Stud.IP-Passwort)") ?>
+                <?= _("Passwort fÃ¼r Ihren TresorschlÃ¼ssel (nicht Stud.IP-Passwort)") ?>
                 <input type="password" id="tresor_password" minlength="10">
             </label>
             <label>
@@ -23,7 +23,7 @@
 
             <div>
                 <strong><?= _("Zur Erinnerung") ?>:</strong>
-                <?= _("Sichere Passwörter sind in erster Regel sehr lang. Benutzen Sie auf keinen Fall Ihr Stud.IP-Passwort!") ?>
+                <?= _("Sichere PasswÃ¶rter sind in erster Regel sehr lang. Benutzen Sie auf keinen Fall Ihr Stud.IP-Passwort!") ?>
             </div>
 
             <input type="hidden" name="user" value="<?= htmlReady(get_fullname()) ?>">
@@ -34,19 +34,21 @@
 
             <div style="display: none;"><input type="submit"></div>
 
-            <?= \Studip\LinkButton::create(_("Passwort setzen"), "#", array('onClick' => "STUDIP.Tresor.setPassword(); return false;")) ?>
+            <div style="text-align: center;">
+                <?= \Studip\LinkButton::create(_("Passwort setzen"), "#", array('onClick' => "STUDIP.Tresor.setPassword(); return false;")) ?>
+            </div>
         </form>
     </div>
 <? endif ?>
-<div style="display: none;" id="question_passphrase_title"><?= _("Passwort zum Entschlüsseln eingeben") ?></div>
+<div style="display: none;" id="question_passphrase_title"><?= _("Passwort zum EntschlÃ¼sseln eingeben") ?></div>
 <div style="display: none;" id="question_passphrase">
     <form class="default" onSubmit="STUDIP.Tresor.extractPrivateKey(); return false;" action="?" method="post">
         <div class="wrong"><?= MessageBox::error(_("Falsches Passwort. Einfach nochmal probieren.")) ?></div>
         <label>
-            <?= _("Passwort zum Entschlüsseln") ?>
+            <?= _("Passwort zum EntschlÃ¼sseln") ?>
             <input type="password" name="passphrase">
         </label>
 
-        <?= \Studip\LinkButton::create(_("Entschlüsseln"), "#", array('onclick' => "STUDIP.Tresor.extractPrivateKey(); return false;")) ?>
+        <?= \Studip\LinkButton::create(_("EntschlÃ¼sseln"), "#", array('onclick' => "STUDIP.Tresor.extractPrivateKey(); return false;")) ?>
     </form>
 </div>

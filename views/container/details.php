@@ -1,7 +1,7 @@
 <?= $this->render_partial("container/_user_key.php") ?>
 
 <div style="display: none;" id="encryption_error">
-    <?= MessageBox::error(_("Das Dokument kann leider nicht entschlüsselt werden. Vermutlich muss es erst von jemand anderem erneut gespeichert werden, damit Sie das lesen können.")) ?>
+    <?= MessageBox::error(_("Das Dokument kann leider nicht entschlÃ¼sselt werden. Vermutlich muss es erst von jemand anderem erneut gespeichert werden, damit Sie das lesen kÃ¶nnen.")) ?>
 </div>
 
 <form action="<?= PluginEngine::getLink($plugin, array(), "container/store/".$container->getId()) ?>"
@@ -17,32 +17,41 @@
 
     <textarea id="content"
               class="onlytext"
-              style="width: calc(100% - 20px); height: calc(100vh - 90px);"
-              placeholder="<?= $container['encrypted_content'] ? _("Es wird entschlüsselt ...") : _("Text eingeben ...") ?>"></textarea>
+              style="width: calc(100% - 20px); height: calc(70vh);"
+              placeholder="<?= $container['encrypted_content'] ? _("Es wird entschlÃ¼sselt ...") : _("Text eingeben ...") ?>"></textarea>
 
     <div class="onlyfile">
-        <a href="" onClick="STUDIP.Tresor.downloadFile(); return false;">
-            <?= Icon::create("download", "clickable")->asImg("60px") ?>
-        </a>
+        <div style="margin-top: 20px;">
+            <a href="#" onClick="STUDIP.Tresor.downloadFile(); return false;">
+                <?= Icon::create("download", "clickable")->asImg("30px", ['class' => "text-bottom"]) ?>
+                <?= _("Datei herunterladen") ?>
+            </a>
+        </div>
     </div>
 
     <script>
-        STUDIP.Tresor.keyToEncryptFor = <?= json_encode(studip_utf8encode(array_map(
+        STUDIP.Tresor.keyToEncryptFor = <?= json_encode(array_map(
             function ($key) { return $key['public_key']; },
             $foreign_user_public_keys
-        ))) ?>;
+        )) ?>;
         jQuery(STUDIP.Tresor.decryptContainer);
     </script>
 
 </form>
 
 
-<div>
+<div data-dialog-button>
 
     <input type="file" id="file_upload" onChange="STUDIP.Tresor.selectFile(event);" style="display: none;">
-    <?= \Studip\LinkButton::create(_("Datei hochladen"), "#", array('onClick' => "jQuery('#file_upload').trigger('click'); return false;")) ?>
 
-    <?= \Studip\LinkButton::create(_("Text eingeben"), "#", array('onClick' => "STUDIP.Tresor.selectText(); return false;")) ?>
+
+    <? if ($container['mime_type'] && $container['mime_type'] !== "text/plain") : ?>
+        <?= \Studip\LinkButton::create(_("Datei hochladen"), "#", array('onClick' => "jQuery('#file_upload').trigger('click'); return false;")) ?>
+    <? else : ?>
+        <? if ($container->isNew()) : ?>
+            <?= \Studip\LinkButton::create(_("Text eingeben"), "#", array('onClick' => "STUDIP.Tresor.selectText(); return false;")) ?>
+        <? endif ?>
+    <? endif ?>
 
     <?= \Studip\LinkButton::create(_("Speichern"), "#", array('onClick' => "STUDIP.Tresor.storeContainer(); return false;")) ?>
 </div>

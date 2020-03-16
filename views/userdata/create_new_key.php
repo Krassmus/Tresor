@@ -4,14 +4,14 @@
       class="default"
       onSubmit="STUDIP.Tresor.setPassword(); return false;">
 
-    <?= MessageBox::info(_("Wenn Sie einen neuen Schlüssel erzeugen, müssen alle schon verschlüsselten Texte noch einmal für Sie verschlüsselt werden. damit Sie diese lesen können.")) ?>
+    <?= MessageBox::info(_("Wenn Sie einen neuen SchlÃ¼ssel erzeugen, mÃ¼ssen alle schon verschlÃ¼sselten Texte noch einmal fÃ¼r Sie verschlÃ¼sselt werden. damit Sie diese lesen kÃ¶nnen.")) ?>
 
     <div id="wheel">
         <img src="<?= $plugin->getPluginURL() ?>/assets/settings.svg" width="40px" heigh="40px">
     </div>
 
     <label>
-        <?= _("Passwort für Ihren neuen Tresorschlüssel (nicht Stud.IP-Passwort)") ?>
+        <?= _("Passwort fÃ¼r Ihren neuen TresorschlÃ¼ssel (nicht Stud.IP-Passwort)") ?>
         <input type="password" id="tresor_password" minlength="10">
     </label>
     <label>
@@ -21,7 +21,7 @@
 
     <div>
         <strong><?= _("Zur Erinnerung") ?>:</strong>
-        <?= _("Sichere Passwörter sind in erster Regel sehr lang. Benutzen Sie auf keinen Fall Ihr Stud.IP-Passwort!") ?>
+        <?= _("Sichere PasswÃ¶rter sind in erster Regel sehr lang. Benutzen Sie auf keinen Fall Ihr Stud.IP-Passwort!") ?>
     </div>
 
     <input type="hidden" name="user" value="<?= htmlReady(get_fullname()) ?>">
