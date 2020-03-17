@@ -38,7 +38,7 @@
                     <? endif ?>
                 </td>
                 <td><?= date("j.n.Y G:i", $container['chdate']) ?></td>
-                <td><?= htmlReady(get_fullname($container['last_user_id'])) ?></td>
+                <td><a href="<?= URLHelper::getLink("dispatch.php/profile", ['username' => get_username($container['last_user_id'])]) ?>"><?= htmlReady(get_fullname($container['last_user_id'])) ?></td>
                 <td class="actions">
                     <? if ($GLOBALS['perm']->have_studip_perm("tutor", Context::get()->id)) : ?>
                         <form action="<?= PluginEngine::getLink($plugin, array(), "container/delete/".$container->getId()) ?>" method="post">

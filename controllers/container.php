@@ -15,6 +15,7 @@ class ContainerController extends PluginController
         $setting = TresorSetting::find(Context::get()->id);
         $name = $setting && $setting['tabname'] ? $setting['tabname'] : _("Tresor");
         PageLayout::setTitle($name);
+        Helpbar::Get()->addPlainText(_("Tresor"), _("Der Tresor ist ein Bereich in Ihrer Veranstaltung, der besonders gesicherte Inhalte beinhalten kann. Sie brauchen deswegen auch ein zweites Passwort nur für den Tresor. Selbst die Admins von Stud.IP sind nicht in der Lage, die Inhalte des Tresors auszulesen. Das können nur Sie und die anderen Mitlesenden der Veranstaltung."));
     }
 
     public function index_action()
