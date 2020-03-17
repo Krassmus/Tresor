@@ -62,7 +62,7 @@
 
 <script>
     jQuery(function () {
-        jQuery("table.sortable").tablesorter();
+        //jQuery("table.sortable").tablesorter();
         STUDIP.Tresor.keyToEncryptFor = <?= json_encode(array_map(
             function ($key) { return $key['public_key']; },
             $foreign_user_public_keys

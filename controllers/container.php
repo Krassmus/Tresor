@@ -11,7 +11,6 @@ class ContainerController extends PluginController
         Navigation::activateItem("/course/tresor");
         PageLayout::addScript($this->plugin->getPluginURL()."/assets/Tresor.js");
         PageLayout::addScript($this->plugin->getPluginURL()."/assets/openpgp.js");
-        PageLayout::addScript("jquery/jquery.tablesorter-2.22.5.js");
         PageLayout::addStylesheet($this->plugin->getPluginURL()."/assets/Tresor.css");
         $setting = TresorSetting::find(Context::get()->id);
         $name = $setting && $setting['tabname'] ? $setting['tabname'] : _("Tresor");
