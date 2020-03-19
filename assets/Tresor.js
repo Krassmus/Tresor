@@ -128,7 +128,6 @@ STUDIP.Tresor = {
                     privateKey: my_key // for decryption
                 };
                 openpgp.decrypt(options).then(function (plaintext) {
-
                     var element = document.createElement('a');
                     element.setAttribute('href', plaintext.data);
                     element.setAttribute('download', jQuery("#content_form [name=name]").val());
@@ -192,6 +191,7 @@ STUDIP.Tresor = {
                 };
                 openpgp.decrypt(options).then(function (plaintext) {
                     jQuery("#content").val(plaintext.data);
+                    jQuery("#tresor_decrypted_preview").attr("src", plaintext.data + "#toolbar=0&navpanes=0&scrollbar=0");
                     return plaintext.data;
                 }, function (error) {
                     jQuery("#encryption_error").show("fade");

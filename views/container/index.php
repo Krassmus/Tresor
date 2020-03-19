@@ -80,8 +80,13 @@
     <input type="hidden" name="mime_type" value="text/plain">
 </form>
 
-
-<input type="file" id="fileupload" onChange="STUDIP.Tresor.uploadFile(event);" style="display: none;">
+<? if (Config::get()->TRESOR_ACCEPT_FILETYPES !== "none") : ?>
+    <input type="file"
+           id="fileupload"
+           onChange="STUDIP.Tresor.uploadFile(event);"
+           <?= Config::get()->TRESOR_ACCEPT_FILETYPES ? 'accept="'.Config::get()->TRESOR_ACCEPT_FILETYPES.'"' : "" ?>
+           style="display: none;">
+<? endif ?>
 
 <?
 
@@ -101,12 +106,14 @@ if ($my_key) {
         Icon::create("add", "clickable"),
         array('data-dialog' => 1)
     );
-    $actions->addLink(
-        _("Datei hochladen"),
-        PluginEngine::getURL($plugin, array(), "container/create_file"),
-        Icon::create("file+add", "clickable"),
-        array('onclick' => "jQuery('#fileupload').trigger('click'); return false;")
-    );
+    if (Config::get()->TRESOR_ACCEPT_FILETYPES !== "none") {
+        $actions->addLink(
+            _("Datei hochladen"),
+            PluginEngine::getURL($plugin, array(), "container/create_file"),
+            Icon::create("file+add", "clickable"),
+            array('onclick' => "jQuery('#fileupload').trigger('click'); return false;")
+        );
+    }
     if ($todo && $GLOBALS['perm']->have_studip_perm("tutor", Context::get()->id)) {
         $actions->addLink(
             _("Dateien aktualisieren für neue Schlüssel"),

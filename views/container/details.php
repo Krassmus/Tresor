@@ -20,14 +20,23 @@
               style="width: calc(100% - 20px); height: calc(70vh);"
               placeholder="<?= $container['encrypted_content'] ? _("Es wird entschlüsselt ...") : _("Text eingeben ...") ?>"></textarea>
 
+
+
+
     <div class="onlyfile">
+
+        <iframe src="" id="tresor_decrypted_preview"></iframe>
+
+        <? if (Config::get()->TRESOR_ALLOW_DOWNLOAD) : ?>
         <div style="margin-top: 20px;">
             <a href="#" onClick="STUDIP.Tresor.downloadFile(); return false;">
                 <?= Icon::create("download", "clickable")->asImg("30px", ['class' => "text-bottom"]) ?>
                 <?= _("Datei herunterladen") ?>
             </a>
         </div>
+        <? endif ?>
     </div>
+
 
     <script>
         STUDIP.Tresor.keyToEncryptFor = <?= json_encode(array_map(

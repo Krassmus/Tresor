@@ -41,3 +41,14 @@
 .ui-dialog.ui-front {
     z-index: 1007;
 }
+
+#tresor_decrypted_preview {
+    width: 100%;
+    height: 600px;
+    border: none;
+}
+
+#tresor_decrypted_preview #toolbarViewerRight {
+    display: none !important; /* hide PDF viewer toolbar */
+}
+
