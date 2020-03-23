@@ -191,14 +191,8 @@ STUDIP.Tresor = {
                 };
                 openpgp.decrypt(options).then(function (plaintext) {
                     jQuery("#content").val(plaintext.data);
-                    if (jQuery("#tresor_decrypted_preview").hasClass("prevent_download")) {
-                        /*let toBinary = function (string) {
-                            const codeUnits = new Uint16Array(string.length);
-                            for (let i = 0; i < codeUnits.length; i++) {
-                                codeUnits[i] = string.charCodeAt(i);
-                            }
-                            return String.fromCharCode(...new Uint8Array(codeUnits.buffer));
-                        };*/
+                    if (jQuery("#tresor_decrypted_preview").hasClass("prevent_download")
+                            && jQuery("#content_form input[name=mime_type]").val() === "application/pdf") {
                         let iframe = document.getElementById("tresor_decrypted_preview");
                         let binary = atob(plaintext.data.substr(plaintext.data.indexOf(",") + 1));
                         let rawLength = binary.length;

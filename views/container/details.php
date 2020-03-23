@@ -23,7 +23,7 @@
 
     <div class="onlyfile">
 
-        <iframe src="<?= !Config::get()->TRESOR_ALLOW_DOWNLOAD ? PluginEngine::getLink($plugin, array('file' => ""), "container/pdfviewer#workerSrc=".urlencode($plugin->getPluginURL()."/assets/pdfjs/build/pdf.worker.js")) : "" ?>" id="tresor_decrypted_preview" class="<?= !Config::get()->TRESOR_ALLOW_DOWNLOAD ? "prevent_download" : "" ?>"></iframe>
+        <iframe src="<?= !Config::get()->TRESOR_ALLOW_DOWNLOAD && $container['mime_type'] !== "application/pdf" ? PluginEngine::getLink($plugin, array('file' => ""), "container/pdfviewer#workerSrc=".urlencode($plugin->getPluginURL()."/assets/pdfjs/build/pdf.worker.js")) : "" ?>" id="tresor_decrypted_preview" class="<?= !Config::get()->TRESOR_ALLOW_DOWNLOAD ? "prevent_download" : "" ?>"></iframe>
 
         <? if (Config::get()->TRESOR_ALLOW_DOWNLOAD) : ?>
         <div style="margin-top: 20px;">
