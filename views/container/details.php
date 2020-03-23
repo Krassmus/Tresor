@@ -21,11 +21,9 @@
               placeholder="<?= $container['encrypted_content'] ? _("Es wird entschlüsselt ...") : _("Text eingeben ...") ?>"></textarea>
 
 
-
-
     <div class="onlyfile">
 
-        <iframe src="" id="tresor_decrypted_preview"></iframe>
+        <iframe src="<?= !Config::get()->TRESOR_ALLOW_DOWNLOAD ? PluginEngine::getLink($plugin, array('file' => ""), "container/pdfviewer#workerSrc=".urlencode($plugin->getPluginURL()."/assets/pdfjs/build/pdf.worker.js")) : "" ?>" id="tresor_decrypted_preview" class="<?= !Config::get()->TRESOR_ALLOW_DOWNLOAD ? "prevent_download" : "" ?>"></iframe>
 
         <? if (Config::get()->TRESOR_ALLOW_DOWNLOAD) : ?>
         <div style="margin-top: 20px;">
@@ -35,6 +33,8 @@
             </a>
         </div>
         <? endif ?>
+
+        <?php /* PDFViewerApplication.open(new Uint8Array(xhr.response)) */ ?>
     </div>
 
 

@@ -191,7 +191,36 @@ STUDIP.Tresor = {
                 };
                 openpgp.decrypt(options).then(function (plaintext) {
                     jQuery("#content").val(plaintext.data);
-                    jQuery("#tresor_decrypted_preview").attr("src", plaintext.data + "#toolbar=0&navpanes=0&scrollbar=0");
+                    if (jQuery("#tresor_decrypted_preview").hasClass("prevent_download")) {
+                        /*let toBinary = function (string) {
+                            const codeUnits = new Uint16Array(string.length);
+                            for (let i = 0; i < codeUnits.length; i++) {
+                                codeUnits[i] = string.charCodeAt(i);
+                            }
+                            return String.fromCharCode(...new Uint8Array(codeUnits.buffer));
+                        };*/
+                        let iframe = document.getElementById("tresor_decrypted_preview");
+                        let binary = atob(plaintext.data.substr(plaintext.data.indexOf(",") + 1));
+                        let rawLength = binary.length;
+                        let array = new Uint8Array(new ArrayBuffer(binary.length));
+                        for(var i = 0; i < binary.length; i++) {
+                            array[i] = binary.charCodeAt(i);
+                        }
+
+                        if (iframe.contentWindow.PDFViewerApplication) {
+                            iframe.contentWindow.PDFViewerApplication.open(
+                                new Uint8Array(array)
+                            );
+                        } else {
+                            iframe.onload = function () {
+                                iframe.contentWindow.PDFViewerApplication.open(
+                                    new Uint8Array(array)
+                                );
+                            };
+                        }
+                    } else {
+                        jQuery("#tresor_decrypted_preview").attr("src", plaintext.data);
+                    }
                     return plaintext.data;
                 }, function (error) {
                     jQuery("#encryption_error").show("fade");

@@ -130,4 +130,12 @@ class ContainerController extends PluginController
         }
     }
 
+    public function pdfviewer_action()
+    {
+        $tf = new Flexi_TemplateFactory(__DIR__."/../assets/pdfjs");
+        $template = $tf->open("web/viewer.php");
+        $template->base_url = $this->plugin->getPluginURL()."/assets/pdfjs";
+        $this->render_text($template->render());
+    }
+
 }

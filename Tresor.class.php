@@ -76,4 +76,21 @@ class Tresor extends StudIPPlugin implements StandardPlugin, SystemPlugin {
         return null;
     }
 
+    public static function onEnable($plugin_id)
+    {
+        //allow for nobody
+        $rp = new RolePersistence();
+        $rp->assignPluginRoles($plugin_id, range(1,7));
+    }
+
+    /**
+     * This function is a hack!
+     * @param $worker
+     */
+    public function build_action($worker)
+    {
+        header("Content-Type: application/javascript");
+        die(file_get_contents($this->getPluginPath()."/assets/pdfjs/build/pdf.worker.js"));
+    }
+
 }
