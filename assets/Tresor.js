@@ -267,14 +267,16 @@ STUDIP.Tresor = {
         window.setTimeout(function () {
             jQuery("#question_passphrase [name=passphrase]").val("");
             jQuery("#question_passphrase .wrong").hide();
-            jQuery("#question_passphrase").dialog({
-                title: jQuery("#question_passphrase_title").text(),
-                modal: true,
-                width: 400,
-                classes: {
-                    "ui-dialog": "front"
-                }
-            });
+            if (!jQuery("#question_passphrase").is(".ui-dialog #question_passphrase")) {
+                jQuery("#question_passphrase").dialog({
+                    title: jQuery("#question_passphrase_title").text(),
+                    modal: true,
+                    width: 400,
+                    classes: {
+                        "ui-dialog": "front"
+                    }
+                });
+            }
             jQuery("#question_passphrase [name=passphrase]").focus();
             if (wrong) {
                 jQuery("#question_passphrase .wrong").show("fade");

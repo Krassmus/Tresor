@@ -1,4 +1,6 @@
-<?= $this->render_partial("container/_user_key.php") ?>
+<? if (!Request::isDialog()) : ?>
+    <?= $this->render_partial("container/_user_key.php") ?>
+<?php endif ?>
 
 <div style="display: none;" id="encryption_error">
     <?= MessageBox::error(_("Das Dokument kann leider nicht entschlüsselt werden. Vermutlich muss es erst von jemand anderem erneut gespeichert werden, damit Sie das lesen können.")) ?>

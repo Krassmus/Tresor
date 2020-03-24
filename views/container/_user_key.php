@@ -46,7 +46,7 @@
         <div class="wrong"><?= MessageBox::error(_("Falsches Passwort. Einfach nochmal probieren.")) ?></div>
         <label>
             <?= _("Passwort zum Entschlüsseln") ?>
-            <input type="password" name="passphrase">
+            <input type="password" name="passphrase" autocomplete="off">
         </label>
 
         <?= \Studip\LinkButton::create(_("Entschlüsseln"), "#", array('onclick' => "STUDIP.Tresor.extractPrivateKey(); return false;")) ?>
