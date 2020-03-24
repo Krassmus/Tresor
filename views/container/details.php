@@ -15,7 +15,7 @@
 
     <input type="hidden" name="encrypted_content" id="encrypted_content" value="<?= htmlReady($container['encrypted_content']) ?>">
 
-    <input type="hidden" name="mime_type" value="text/plain" value="<?= htmlReady($container['mime_type']) ?>">
+    <input type="hidden" name="mime_type" value="<?= htmlReady($container['mime_type']) ?>">
 
     <textarea id="content"
               class="onlytext"
@@ -25,7 +25,9 @@
 
     <div class="onlyfile">
 
-        <iframe src="<?= !Config::get()->TRESOR_ALLOW_DOWNLOAD && $container['mime_type'] !== "application/pdf" ? PluginEngine::getLink($plugin, array('file' => ""), "container/pdfviewer#workerSrc=".urlencode($plugin->getPluginURL()."/assets/pdfjs/build/pdf.worker.js")) : "" ?>" id="tresor_decrypted_preview" class="<?= !Config::get()->TRESOR_ALLOW_DOWNLOAD ? "prevent_download" : "" ?>"></iframe>
+        <iframe src="<?= !Config::get()->TRESOR_ALLOW_DOWNLOAD && $container['mime_type'] === "application/pdf" ? PluginEngine::getLink($plugin, array('file' => ""), "container/pdfviewer") : "" ?>"
+                id="tresor_decrypted_preview"
+                class="<?= !Config::get()->TRESOR_ALLOW_DOWNLOAD ? "prevent_download" : "" ?>"></iframe>
 
         <? if (Config::get()->TRESOR_ALLOW_DOWNLOAD) : ?>
         <div style="margin-top: 20px;">
