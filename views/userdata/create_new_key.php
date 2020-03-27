@@ -11,7 +11,7 @@
     </div>
 
     <label>
-        <?= _("Passwort für Ihren neuen Tresorschlüssel (nicht Stud.IP-Passwort)") ?>
+        <?= _("Passwort für Ihren neuen Schlüssel (nicht Stud.IP-Passwort)") ?>
         <input type="password" id="tresor_password" minlength="10">
     </label>
     <label>

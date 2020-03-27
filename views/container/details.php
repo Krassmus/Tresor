@@ -11,7 +11,7 @@
       class="default <?= $container['mime_type'] && $container['mime_type'] !== "text/plain" ? "file" : "text" ?>"
       id="content_form">
 
-    <input type="text" name="name" value="<?= htmlReady($container['name']) ?>">
+    <h2><?= htmlReady($container['name']) ?></h2>
 
     <input type="hidden" name="encrypted_content" id="encrypted_content" value="<?= htmlReady($container['encrypted_content']) ?>">
 
@@ -43,29 +43,8 @@
 
 
     <script>
-        STUDIP.Tresor.keyToEncryptFor = <?= json_encode(array_map(
-            function ($key) { return $key['public_key']; },
-            $foreign_user_public_keys
-        )) ?>;
         jQuery(STUDIP.Tresor.decryptContainer);
     </script>
 
 </form>
-
-
-<div data-dialog-button>
-
-    <input type="file" id="file_upload" onChange="STUDIP.Tresor.selectFile(event);" style="display: none;">
-
-
-    <? if ($container['mime_type'] && $container['mime_type'] !== "text/plain") : ?>
-        <?= \Studip\LinkButton::create(_("Datei hochladen"), "#", array('onClick' => "jQuery('#file_upload').trigger('click'); return false;")) ?>
-    <? else : ?>
-        <? if ($container->isNew()) : ?>
-            <?= \Studip\LinkButton::create(_("Text eingeben"), "#", array('onClick' => "STUDIP.Tresor.selectText(); return false;")) ?>
-        <? endif ?>
-    <? endif ?>
-
-    <?= \Studip\LinkButton::create(_("Speichern"), "#", array('onClick' => "STUDIP.Tresor.storeContainer(); return false;")) ?>
-</div>
 

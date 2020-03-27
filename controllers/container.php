@@ -13,9 +13,9 @@ class ContainerController extends PluginController
         PageLayout::addScript($this->plugin->getPluginURL()."/assets/openpgp.js");
         PageLayout::addStylesheet($this->plugin->getPluginURL()."/assets/Tresor.css");
         $setting = TresorSetting::find(Context::get()->id);
-        $name = $setting && $setting['tabname'] ? $setting['tabname'] : _("Tresor");
+        $name = $setting && $setting['tabname'] ? $setting['tabname'] : Config::get()->TRESOR_GLOBALS_NAME;
         PageLayout::setTitle($name);
-        Helpbar::Get()->addPlainText(_("Tresor"), _("Der Tresor ist ein Bereich in Ihrer Veranstaltung, der besonders gesicherte Inhalte beinhalten kann. Sie brauchen deswegen auch ein zweites Passwort nur für den Tresor. Selbst die Admins von Stud.IP sind nicht in der Lage, die Inhalte des Tresors auszulesen. Das können nur Sie und die anderen Mitlesenden der Veranstaltung."));
+        Helpbar::Get()->addPlainText(Config::get()->TRESOR_GLOBALS_NAME, _("Der Tresor ist ein Bereich in Ihrer Veranstaltung, der besonders gesicherte Inhalte beinhalten kann. Sie brauchen deswegen auch ein zweites Passwort nur für den Tresor. Selbst die Admins von Stud.IP sind nicht in der Lage, die Inhalte des Tresors auszulesen. Das können nur Sie und die anderen Mitlesenden der Veranstaltung."));
     }
 
     public function index_action()
@@ -33,6 +33,17 @@ class ContainerController extends PluginController
         if (!$GLOBALS['perm']->have_studip_perm("autor", $this->container['seminar_id'])) {
             throw new AccessDeniedException();
         }
+        PageLayout::setTitle($this->container['name']);
+        $this->foreign_user_public_keys = TresorUserKey::findForSeminar($this->container['seminar_id']);
+    }
+
+    public function edit_action($tresor_id)
+    {
+        $this->container = new TresorContainer($tresor_id);
+        if (!$GLOBALS['perm']->have_studip_perm("autor", $this->container['seminar_id'])) {
+            throw new AccessDeniedException();
+        }
+        PageLayout::setTitle(sprintf(_("%s bearbeiten"), $this->container['name']));
         $this->foreign_user_public_keys = TresorUserKey::findForSeminar($this->container['seminar_id']);
     }
 
@@ -96,9 +107,14 @@ class ContainerController extends PluginController
         $this->render_text("updated");
     }
 
-    public function get_updatable_for_course_action($course_id) {
+    public function get_updatable_for_course_action($course_id)
+    {
         if (!$GLOBALS['perm']->have_studip_perm("autor", $course_id)) {
             throw new AccessDeniedException();
+        }
+        $my_key = TresorUserKey::findMine();
+        if (!$my_key) {
+            throw new Exception("Sie sind abgemeldet oder haben noch keinen eigenen Schlüssel.");
         }
         $data = [];
         $earliest_date = 0;
@@ -106,14 +122,17 @@ class ContainerController extends PluginController
             $earliest_date = max($earliest_date, $key['chdate']);
         }
         foreach (TresorContainer::findBySQL("seminar_id = ? AND chdate <= ? ORDER BY name", array($course_id, $earliest_date)) as $container) {
-            $d = $container->toRawArray();
-            $d['encrypted_content'] = $container->getEncryptedContent();
-            $data[] = $d;
+            if ($my_key['chdate'] <= $container['chdate']) {
+                $d = $container->toRawArray();
+                $d['encrypted_content'] = $container->getEncryptedContent();
+                $data[] = $d;
+            }
         }
         $this->render_json($data);
     }
 
-    public function settings_action() {
+    public function settings_action()
+    {
         if (!$GLOBALS['perm']->have_studip_perm("tutor", Context::get()->id)) {
             throw new AccessDeniedException();
         }

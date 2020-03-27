@@ -13,7 +13,7 @@ class Tresor extends StudIPPlugin implements StandardPlugin, SystemPlugin {
             PageLayout::addHeadElement("script", array(), 'sessionStorage.setItem("STUDIP.Tresor.passphrase", "");');
         }
         if ($GLOBALS['perm']->have_perm("autor") && !$GLOBALS['perm']->have_perm("admin")) {
-            $navigation = new Navigation(_("Tresor"), PluginEngine::getURL($this, array(), "userdata/settings"));
+            $navigation = new Navigation(Config::get()->TRESOR_GLOBALS_NAME, PluginEngine::getURL($this, array(), "userdata/settings"));
             if (Navigation::hasItem("/profile/settings")) {
                 Navigation::addItem("/profile/settings/tresor", $navigation);
             }
@@ -42,7 +42,7 @@ class Tresor extends StudIPPlugin implements StandardPlugin, SystemPlugin {
 
     function getIconNavigation($course_id, $last_visit, $user_id) {
         $setting = TresorSetting::find($course_id);
-        $name = $setting && $setting['tabname'] ? $setting['tabname'] : _("Tresor");
+        $name = $setting && $setting['tabname'] ? $setting['tabname'] : Config::get()->TRESOR_GLOBALS_NAME;
         $icon = new Navigation($name, PluginEngine::getURL($this, array(), "container/index"));
         $new_container = TresorContainer::countBySQL("seminar_id = :course_id AND chdate > :last_visit AND last_user_id != :user_id", array(
             'course_id' => $course_id,
@@ -61,7 +61,7 @@ class Tresor extends StudIPPlugin implements StandardPlugin, SystemPlugin {
 
     function getTabNavigation($course_id) {
         $setting = TresorSetting::find($course_id);
-        $name = $setting && $setting['tabname'] ? $setting['tabname'] : _("Tresor");
+        $name = $setting && $setting['tabname'] ? $setting['tabname'] : Config::get()->TRESOR_GLOBALS_NAME;
         $tab = new Navigation($name, PluginEngine::getURL($this, array(), "container/index"));
         $tab->setImage(Icon::create("lock-locked", "info_alt"));
         $tab->setActiveImage(Icon::create("lock-locked", "info"));

@@ -52,3 +52,13 @@
     display: none !important; /* hide PDF viewer toolbar */
 }
 
+.tresor_delete {
+    display: inline-block;
+}
+.tresor_delete button {
+    border: none;
+    background: none;
+    cursor: pointer;
+    margin: 0px;
+    padding: 0px;
+}

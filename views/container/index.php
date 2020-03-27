@@ -20,7 +20,9 @@
                     <? foreach ($foreign_user_public_keys as $key) {
                         if ($key['chdate'] >= $container['chdate']) {
                             echo Icon::create("exclaim-circle", "info")->asImg(20, ['class' => "text-bottom", 'title' => _("Dieses Objekt muss noch einmal verschlüsselt werden, damit alle Teilnehmer*innen der Veranstaltung es sehen können.")]);
-                            $todo = true;
+                            if ($my_key['chdate'] <= $container['chdate']) {
+                                $todo = true;
+                            }
                             break;
                         }
                     } ?>
@@ -40,10 +42,16 @@
                 <td><?= date("j.n.Y G:i", $container['chdate']) ?></td>
                 <td><a href="<?= URLHelper::getLink("dispatch.php/profile", ['username' => get_username($container['last_user_id'])]) ?>"><?= htmlReady(get_fullname($container['last_user_id'])) ?></td>
                 <td class="actions">
-                    <? if ($GLOBALS['perm']->have_studip_perm("tutor", Context::get()->id)) : ?>
-                        <form action="<?= PluginEngine::getLink($plugin, array(), "container/delete/".$container->getId()) ?>" method="post">
-                            <button
-                                style="border: none; background: none; cursor: pointer;"
+                    <? if ($GLOBALS['perm']->have_studip_perm("tutor", Context::get()->id) || $container['last_user_id'] === $GLOBALS['user']->id) : ?>
+                        <? if (!$GLOBALS['perm']->have_perm("admin")) : ?>
+                            <a href="<?= PluginEngine::getLink($plugin, array(), "container/edit/".$container->getId()) ?>" data-dialog title="<?= _("Objekt bearbeiten") ?>">
+                                <?= Icon::create("edit", "clickable")->asImg(20, ['class' => "text-bottom"]) ?>
+                            </a>
+                        <? endif ?>
+                        <form action="<?= PluginEngine::getLink($plugin, array(), "container/delete/".$container->getId()) ?>"
+                              method="post"
+                              class="tresor_delete">
+                            <button title="<?= _("Objekt löschen") ?>"
                                 onClick="return window.confirm('<?= _("Wirklich löschen?") ?>');">
                                 <?= Icon::create("trash", "clickable")->asImg("20px") ?>
                             </button>

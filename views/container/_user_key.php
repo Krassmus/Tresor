@@ -3,7 +3,7 @@
      data-private_key="<?= htmlReady($my_key['synchronously_encrypted_private_key']) ?>"
      data-public_key="<?= htmlReady($my_key['public_key']) ?>"></div>
 <? if (!$my_key && !$GLOBALS['perm']->have_perm("admin")) : ?>
-    <? PageLayout::postMessage(MessageBox::info(sprintf(_("Sie haben noch keinen Schlüssel für den Tresor. %sJetzt erstellen.%s"), '<a href="" onClick="STUDIP.Tresor.createUserKeys(); return false;">', '</a>'))) ?>
+    <? PageLayout::postMessage(MessageBox::info(sprintf(_("Sie haben noch keinen Schlüssel für %s. %sJetzt erstellen.%s"), Config::get()->TRESOR_GLOBALS_NAME, '<a href="" onClick="STUDIP.Tresor.createUserKeys(); return false;">', '</a>'))) ?>
 
     <div id="set_password_title" style="display: none;"><?= _("Wählen Sie ein sicheres Passwort aus") ?></div>
     <div id="set_password" style="display: none;">
@@ -13,7 +13,7 @@
             </div>
 
             <label>
-                <?= _("Passwort für Ihren Tresorschlüssel (nicht Stud.IP-Passwort)") ?>
+                <?= sprintf(_("Passwort für Ihren Schlüssel für %s (nicht Stud.IP-Passwort)"), Config::get()->TRESOR_GLOBALS_NAME) ?>
                 <input type="password" id="tresor_password" minlength="10">
             </label>
             <label>

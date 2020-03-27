@@ -2,7 +2,7 @@
 
     <label>
         <?= _("Name des Reiters") ?>
-        <input type="text" name="tabname" value="<?= htmlReady($setting['tabname']) ?>" placeholder="<?= _("Tresor") ?>">
+        <input type="text" name="tabname" value="<?= htmlReady($setting['tabname']) ?>" placeholder="<?= htmlReady(Config::get()->TRESOR_GLOBALS_NAME) ?>">
     </label>
 
     <div data-dialog-button>
