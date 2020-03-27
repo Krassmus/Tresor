@@ -86,7 +86,7 @@ class ContainerController extends PluginController
     {
         if (Request::isPost()) {
             $this->container = new TresorContainer($tresor_id);
-            if (!$GLOBALS['perm']->have_studip_perm("tutor", $this->container['seminar_id'])) {
+            if (!$GLOBALS['perm']->have_studip_perm("tutor", $this->container['seminar_id']) && ($this->container['last_user_id'] !== $GLOBALS['user']->id)) {
                 throw new AccessDeniedException();
             }
             $this->container->delete();
