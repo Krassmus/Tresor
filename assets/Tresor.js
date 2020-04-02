@@ -197,7 +197,7 @@ STUDIP.Tresor = {
                         let binary = atob(plaintext.data.substr(plaintext.data.indexOf(",") + 1));
                         let rawLength = binary.length;
                         let array = new Uint8Array(new ArrayBuffer(binary.length));
-                        for(var i = 0; i < binary.length; i++) {
+                        for (var i = 0; i < binary.length; i++) {
                             array[i] = binary.charCodeAt(i);
                         }
 
