@@ -16,6 +16,7 @@
     <input type="hidden" name="encrypted_content" id="encrypted_content" value="<?= htmlReady($container['encrypted_content']) ?>">
 
     <input type="hidden" name="mime_type" value="<?= htmlReady($container['mime_type']) ?>">
+    <input type="hidden" name="name" value="<?= htmlReady($container['name']) ?>">
 
     <textarea id="content"
               class="onlytext"
