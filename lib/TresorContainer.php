@@ -46,4 +46,26 @@ class TresorContainer extends SimpleORMap {
         return @unlink($this->getFilePath());
     }
 
+    public function needsReencryption()
+    {
+        if (!file_exists($this->getFilePath()) || !$this->getEncryptedContent()) {
+            return false;
+        }
+        $statement = DBManager::get()->prepare("
+            SELECT 1
+            FROM tresor_container
+                INNER JOIN seminar_user ON (tresor_container.seminar_id = seminar_user.Seminar_id)
+                LEFT JOIN tresor_user_keys ON (seminar_user.user_id = tresor_user_keys.user_id)
+            WHERE (
+                    tresor_user_keys.chdate > tresor_container.chdate
+                    OR seminar_user.mkdate > tresor_container.chdate
+                )
+                AND tresor_container.tresor_id = :tresor_id
+        ");
+        $statement->execute(array(
+            'tresor_id' => $this->getId()
+        ));
+        return (bool) $statement->fetch(PDO::FETCH_COLUMN, 0);
+    }
+
 }

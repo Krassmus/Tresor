@@ -20,13 +20,10 @@
             <? $new = ($container['chdate'] > Request::int("highlight")) && ($container['last_user_id'] !== $GLOBALS['user']->id) ?>
             <tr<?= $new ? ' class="new"' : "" ?>>
                 <td>
-                    <? foreach ($foreign_user_public_keys as $key) {
-                        if ($key['chdate'] >= $container['chdate'] && file_exists($container->getFilePath()) && $container->getEncryptedContent()) {
-                            echo Icon::create("exclaim-circle", "info")->asImg(20, ['class' => "text-bottom", 'title' => _("Dieses Objekt muss noch einmal verschlüsselt werden, damit alle Teilnehmer*innen der Veranstaltung es sehen können.")]);
-                            if ($my_key['chdate'] <= $container['chdate']) {
-                                $todo = true;
-                            }
-                            break;
+                    <? if ($container->needsReencryption()) {
+                        echo Icon::create("exclaim-circle", "info")->asImg(20, ['class' => "text-bottom", 'title' => _("Dieses Objekt muss noch einmal verschlüsselt werden, damit alle Teilnehmer*innen der Veranstaltung es sehen können.")]);
+                        if ($my_key['chdate'] <= $container['chdate']) {
+                            $todo = true;
                         }
                     } ?>
                 </td>

@@ -24,6 +24,7 @@
     <textarea id="content"
               class="onlytext"
               style="width: calc(100% - 20px); height: calc(70vh);"
+              readonly
               placeholder="<?= $container['encrypted_content'] ? _("Es wird entschlüsselt ...") : _("Text eingeben ...") ?>"></textarea>
 
 

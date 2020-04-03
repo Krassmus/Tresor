@@ -128,7 +128,7 @@ class ContainerController extends PluginController
         }
         foreach (TresorContainer::findBySQL("seminar_id = ? AND chdate <= ? ORDER BY name", array($course_id, $earliest_date)) as $container) {
             if ($my_key['chdate'] <= $container['chdate']
-                    && file_exists($container->getFilePath())) {
+                    && $container->needsReencryption()) {
                 $d = $container->toRawArray();
                 $d['encrypted_content'] = $container->getEncryptedContent();
                 if ($d['encrypted_content']) {
