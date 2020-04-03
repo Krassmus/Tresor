@@ -122,11 +122,7 @@ class ContainerController extends PluginController
             throw new Exception("Sie sind abgemeldet oder haben noch keinen eigenen Schlüssel.");
         }
         $data = [];
-        $earliest_date = 0;
-        foreach (TresorUserKey::findForSeminar(Context::get()->id) as $key) {
-            $earliest_date = max($earliest_date, $key['chdate']);
-        }
-        foreach (TresorContainer::findBySQL("seminar_id = ? AND chdate <= ? ORDER BY name", array($course_id, $earliest_date)) as $container) {
+        foreach (TresorContainer::findBySQL("seminar_id = ? ORDER BY name", array($course_id)) as $container) {
             if ($my_key['chdate'] <= $container['chdate']
                     && $container->needsReencryption()) {
                 $d = $container->toRawArray();
