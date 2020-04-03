@@ -100,11 +100,11 @@
 <? endif ?>
 
 <? if ($todo && $GLOBALS['perm']->have_studip_perm("tutor", Context::get()->id)) : ?>
-<div id="dialog_wait_renew_containers"
-     data-title="<?= _("Daten werden verschlüsselt ...") ?>"
-     style="display: none;">
-    <div class="uploadbar" style="margin-top: 20px;"></div>
-</div>
+    <div id="dialog_wait_renew_containers"
+         data-title="<?= _("Daten werden verschlüsselt ...") ?>"
+         style="display: none;">
+        <div class="uploadbar" style="margin-top: 20px;"></div>
+    </div>
 <? endif ?>
 
 <?

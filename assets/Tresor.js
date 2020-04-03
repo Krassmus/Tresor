@@ -313,17 +313,17 @@ STUDIP.Tresor = {
                         alert("Nichts zu tun.");
                         return;
                     }
-                    var keys = [];
-                    for (var i in STUDIP.Tresor.keyToEncryptFor) {
-                        var publicKey = openpgp.key.readArmored(STUDIP.Tresor.keyToEncryptFor[i]);
-                        keys.push(publicKey.keys[0]);
-                    }
                     let number = containers.length;
                     let finished = 0;
                     jQuery("#dialog_wait_renew_containers").dialog({
                         "modal": true,
                         "title": jQuery("#dialog_wait_renew_containers").data("title")
                     });
+                    var keys = [];
+                    for (var i in STUDIP.Tresor.keyToEncryptFor) {
+                        var publicKey = openpgp.key.readArmored(STUDIP.Tresor.keyToEncryptFor[i]);
+                        keys.push(publicKey.keys[0]);
+                    }
                     for (let i in containers) {
                         if (containers[i].encrypted_content) {
                             STUDIP.Tresor.decryptText(containers[i].encrypted_content).then(function (plaintext) {
