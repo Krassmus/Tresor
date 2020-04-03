@@ -1,3 +1,6 @@
+<? if ($donothing) {
+    return;
+} ?>
 <?= $this->render_partial("container/_user_key.php") ?>
 <? $my_key = TresorUserKey::findMine() ?>
 
@@ -96,8 +99,15 @@
            style="display: none;">
 <? endif ?>
 
-<?
+<? if ($todo && $GLOBALS['perm']->have_studip_perm("tutor", Context::get()->id)) : ?>
+<div id="dialog_wait_renew_containers" data-title="<?= _("Daten werden verschlüsselt") ?>">
+    <div>
 
+    </div>
+</div>
+<? endif ?>
+
+<?
 $actions = new ActionsWidget();
 if ($my_key) {
     if ($GLOBALS['perm']->have_studip_perm("tutor", Context::get()->id)) {

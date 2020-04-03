@@ -1,4 +1,6 @@
-
+<? if ($donothing) {
+    return;
+} ?>
 <form action="<?= PluginEngine::getLink($plugin, array(), "userdata/create_new_key") ?>"
       method="post"
       class="default"

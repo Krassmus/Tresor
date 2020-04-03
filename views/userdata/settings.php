@@ -1,3 +1,6 @@
+<? if ($donothing) {
+    return;
+} ?>
 <div>
     <?= nl2br(htmlReady(TresorUserKey::find($GLOBALS['user']->id)->public_key)) ?>
 </div>

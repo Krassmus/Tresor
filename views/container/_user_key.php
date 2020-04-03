@@ -1,3 +1,6 @@
+<? if ($donothing) {
+    return;
+} ?>
 <? $my_key = TresorUserKey::findMine() ?>
 <div id="my_key"
      data-private_key="<?= htmlReady($my_key['synchronously_encrypted_private_key']) ?>"

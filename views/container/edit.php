@@ -1,3 +1,6 @@
+<? if ($donothing) {
+    return;
+} ?>
 <? if (!Request::isDialog()) : ?>
     <?= $this->render_partial("container/_user_key.php") ?>
 <?php endif ?>

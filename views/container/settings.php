@@ -1,3 +1,6 @@
+<? if ($donothing) {
+    return;
+} ?>
 <form action="<?= PluginEngine::getLink($plugin, array(), "container/settings") ?>" method="post" class="default">
 
     <label>

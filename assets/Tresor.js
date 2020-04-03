@@ -316,6 +316,7 @@ STUDIP.Tresor = {
                     }
                     let number = containers.length;
                     let finished = 0;
+                    jQuery("#dialog_wait_renew_containers").dialog();
                     for (let i in containers) {
                         if (containers[i].encrypted_content) {
                             STUDIP.Tresor.decryptText(containers[i].encrypted_content).then(function (plaintext) {
