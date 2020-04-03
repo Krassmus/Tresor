@@ -127,10 +127,13 @@ class ContainerController extends PluginController
             $earliest_date = max($earliest_date, $key['chdate']);
         }
         foreach (TresorContainer::findBySQL("seminar_id = ? AND chdate <= ? ORDER BY name", array($course_id, $earliest_date)) as $container) {
-            if ($my_key['chdate'] <= $container['chdate']) {
+            if ($my_key['chdate'] <= $container['chdate']
+                    && file_exists($container->getFilePath())) {
                 $d = $container->toRawArray();
                 $d['encrypted_content'] = $container->getEncryptedContent();
-                $data[] = $d;
+                if ($d['encrypted_content']) {
+                    $data[] = $d;
+                }
             }
         }
         $this->render_json($data);

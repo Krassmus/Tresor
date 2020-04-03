@@ -21,7 +21,7 @@
             <tr<?= $new ? ' class="new"' : "" ?>>
                 <td>
                     <? foreach ($foreign_user_public_keys as $key) {
-                        if ($key['chdate'] >= $container['chdate']) {
+                        if ($key['chdate'] >= $container['chdate'] && file_exists($container->getFilePath()) && $container->getEncryptedContent()) {
                             echo Icon::create("exclaim-circle", "info")->asImg(20, ['class' => "text-bottom", 'title' => _("Dieses Objekt muss noch einmal verschlüsselt werden, damit alle Teilnehmer*innen der Veranstaltung es sehen können.")]);
                             if ($my_key['chdate'] <= $container['chdate']) {
                                 $todo = true;
@@ -100,10 +100,10 @@
 <? endif ?>
 
 <? if ($todo && $GLOBALS['perm']->have_studip_perm("tutor", Context::get()->id)) : ?>
-<div id="dialog_wait_renew_containers" data-title="<?= _("Daten werden verschlüsselt") ?>">
-    <div>
-
-    </div>
+<div id="dialog_wait_renew_containers"
+     data-title="<?= _("Daten werden verschlüsselt ...") ?>"
+     style="display: none;">
+    <div class="uploadbar" style="margin-top: 20px;"></div>
 </div>
 <? endif ?>
 

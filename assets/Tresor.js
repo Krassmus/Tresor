@@ -309,6 +309,10 @@ STUDIP.Tresor = {
                 "url": STUDIP.URLHelper.getURL("plugins.php/tresor/container/get_updatable_for_course/" + course_id),
                 "dataType": "json",
                 "success": function (containers) {
+                    if (!containers.length) {
+                        alert("Nichts zu tun.");
+                        return;
+                    }
                     var keys = [];
                     for (var i in STUDIP.Tresor.keyToEncryptFor) {
                         var publicKey = openpgp.key.readArmored(STUDIP.Tresor.keyToEncryptFor[i]);
@@ -316,7 +320,10 @@ STUDIP.Tresor = {
                     }
                     let number = containers.length;
                     let finished = 0;
-                    jQuery("#dialog_wait_renew_containers").dialog();
+                    jQuery("#dialog_wait_renew_containers").dialog({
+                        "modal": true,
+                        "title": jQuery("#dialog_wait_renew_containers").data("title")
+                    });
                     for (let i in containers) {
                         if (containers[i].encrypted_content) {
                             STUDIP.Tresor.decryptText(containers[i].encrypted_content).then(function (plaintext) {
@@ -326,6 +333,8 @@ STUDIP.Tresor = {
                                 };
                                 openpgp.encrypt(options).then(function (ciphertext) {
                                     let encrypted_content = ciphertext.data.replace(/\r/, "");
+                                    finished++;
+                                    jQuery(".uploadbar").css("background-size", Math.floor(100 * finished / (2 * number)) + "% 100%");
                                     jQuery.ajax({
                                         "url": STUDIP.URLHelper.getURL("plugins.php/tresor/container/update/" + containers[i].tresor_id),
                                         "data": {
@@ -334,7 +343,8 @@ STUDIP.Tresor = {
                                         "type": "post",
                                         "success": function () {
                                             finished++;
-                                            if (finished === number) {
+                                            jQuery(".uploadbar").css("background-size", Math.floor(100 * finished / (2 * number)) + "% 100%");
+                                            if (finished === 2 * number) {
                                                 location.reload();
                                             }
                                         }

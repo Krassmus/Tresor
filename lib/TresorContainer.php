@@ -26,7 +26,7 @@ class TresorContainer extends SimpleORMap {
         return file_put_contents($this->getFilePath(), $value);
     }
 
-    protected function getFilePath() {
+    public function getFilePath() {
         if (!file_exists(self::getDataPath())) {
             mkdir(self::getDataPath());
         }
