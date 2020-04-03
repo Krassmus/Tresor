@@ -78,7 +78,7 @@ class ContainerController extends PluginController
             $this->container['encrypted_content'] = "";
             $this->container->store();
             PageLayout::postSuccess(_("Neuen Text initialisiert"));
-            $this->redirect("container/details/".$this->container->getId());
+            $this->redirect("container/edit/".$this->container->getId());
         }
     }
 
