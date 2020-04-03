@@ -7,7 +7,7 @@ class TresorUserKey extends SimpleORMap {
         return self::findOneBySQL("user_id = ?", array($GLOBALS['user']->id));
     }
 
-    public function findForSeminar($seminar_id) {
+    public static function findForSeminar($seminar_id) {
         $statement = DBManager::get()->prepare("
             SELECT tresor_user_keys.*
             FROM tresor_user_keys
