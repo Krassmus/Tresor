@@ -190,32 +190,34 @@ STUDIP.Tresor = {
                     privateKey: my_key // for decryption
                 };
                 openpgp.decrypt(options).then(function (plaintext) {
-                    jQuery("#content").val(plaintext.data);
-                    if (jQuery("#tresor_decrypted_preview").hasClass("prevent_download")
+                    window.setTimeout(function () {
+                        jQuery("#content").val(plaintext.data);
+                        if (jQuery("#tresor_decrypted_preview").hasClass("prevent_download")
                             && jQuery("#content_form input[name=mime_type]").val() === "application/pdf") {
-                        let iframe = document.getElementById("tresor_decrypted_preview");
-                        let binary = atob(plaintext.data.substr(plaintext.data.indexOf(",") + 1));
-                        let rawLength = binary.length;
-                        let array = new Uint8Array(new ArrayBuffer(binary.length));
-                        for (var i = 0; i < binary.length; i++) {
-                            array[i] = binary.charCodeAt(i);
-                        }
+                            let iframe = document.getElementById("tresor_decrypted_preview");
+                            let binary = atob(plaintext.data.substr(plaintext.data.indexOf(",") + 1));
+                            let rawLength = binary.length;
+                            let array = new Uint8Array(new ArrayBuffer(binary.length));
+                            for (var i = 0; i < binary.length; i++) {
+                                array[i] = binary.charCodeAt(i);
+                            }
 
-                        if (iframe.contentWindow.PDFViewerApplication) {
-                            iframe.contentWindow.PDFViewerApplication.open(
-                                new Uint8Array(array)
-                            );
-                        } else {
-                            iframe.onload = function () {
+                            if (iframe.contentWindow.PDFViewerApplication) {
                                 iframe.contentWindow.PDFViewerApplication.open(
                                     new Uint8Array(array)
                                 );
-                            };
+                            } else {
+                                iframe.onload = function () {
+                                    iframe.contentWindow.PDFViewerApplication.open(
+                                        new Uint8Array(array)
+                                    );
+                                };
+                            }
+                        } else {
+                            jQuery("#tresor_decrypted_preview").attr("src", plaintext.data);
                         }
-                    } else {
-                        jQuery("#tresor_decrypted_preview").attr("src", plaintext.data);
-                    }
-                    return plaintext.data;
+                        return plaintext.data;
+                    }, 150);
                 }, function (error) {
                     jQuery("#encryption_error").show("fade");
                     jQuery("#content_form").hide();
