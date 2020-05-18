@@ -32,16 +32,29 @@
 
         <? if (stripos($container['mime_type'], "video/") === 0) : ?>
             <video id="tresor_decrypted_preview"
-                autoplay
-                controls
-                class="<?= !Config::get()->TRESOR_ALLOW_DOWNLOAD ? "prevent_download" : "" ?>"
-                <?= !Config::get()->TRESOR_ALLOW_DOWNLOAD ? ' oncontextmenu="return false;"' : '' ?>
-                src="">
+                   autoplay
+                   controls
+                   class="<?= !Config::get()->TRESOR_ALLOW_DOWNLOAD ? "prevent_download" : "" ?>"
+                    <?= !Config::get()->TRESOR_ALLOW_DOWNLOAD ? ' oncontextmenu="return false;"' : '' ?>
+                   src="">
             </video>
-        <? else : ?>
-        <iframe src="<?= !Config::get()->TRESOR_ALLOW_DOWNLOAD && $container['mime_type'] === "application/pdf" ? PluginEngine::getLink($plugin, array('file' => ""), "container/pdfviewer") : "" ?>"
-                id="tresor_decrypted_preview"
-                class="<?= !Config::get()->TRESOR_ALLOW_DOWNLOAD ? "prevent_download" : "" ?>"></iframe>
+        <? elseif (stripos($container['mime_type'], "audio/") === 0) : ?>
+            <audio id="tresor_decrypted_preview"
+                   autoplay
+                   controls
+                   class="<?= !Config::get()->TRESOR_ALLOW_DOWNLOAD ? "prevent_download" : "" ?>"
+                    <?= !Config::get()->TRESOR_ALLOW_DOWNLOAD ? ' oncontextmenu="return false;"' : '' ?>
+                   src="">
+            </audio>
+        <? elseif (stripos($container['mime_type'], "image/") === 0) : ?>
+            <img id="tresor_decrypted_preview"
+                   class="<?= !Config::get()->TRESOR_ALLOW_DOWNLOAD ? "prevent_download" : "" ?>"
+                    <?= !Config::get()->TRESOR_ALLOW_DOWNLOAD ? ' oncontextmenu="return false;"' : '' ?>
+                   src="">
+        <? elseif (Config::get()->TRESOR_ALLOW_DOWNLOAD || $container['mime_type'] === "application/pdf") : ?>
+            <iframe src="<?= !Config::get()->TRESOR_ALLOW_DOWNLOAD && $container['mime_type'] === "application/pdf" ? PluginEngine::getLink($plugin, array('file' => ""), "container/pdfviewer") : "" ?>"
+                    id="tresor_decrypted_preview"
+                    class="<?= !Config::get()->TRESOR_ALLOW_DOWNLOAD ? "prevent_download" : "" ?>"></iframe>
         <? endif ?>
         <? if (Config::get()->TRESOR_ALLOW_DOWNLOAD) : ?>
         <div style="margin-top: 20px;">

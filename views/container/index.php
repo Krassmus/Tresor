@@ -92,7 +92,7 @@
     <input type="file"
            id="fileupload"
            onChange="STUDIP.Tresor.uploadFile(event);"
-           <?= Config::get()->TRESOR_ACCEPT_FILETYPES ? 'accept="'.Config::get()->TRESOR_ACCEPT_FILETYPES.'"' : "" ?>
+           <?= Config::get()->TRESOR_ACCEPT_FILETYPES ? 'accept="'.htmlReady(Config::get()->TRESOR_ACCEPT_FILETYPES).'"' : "" ?>
            style="display: none;">
 <? endif ?>
 
