@@ -1,7 +1,7 @@
 pluginname=Tresor
 pluginclassname=Tresor
 origin=RasmusFuhse
-version=1.3.2
+version=1.3.3
 studipMinversion=4.0
 summary=Besonders sichere und verschlüsselte Ablage für Texte
 descriptionlong=Tresor bietet eine sichere Ablage für Texte. Die Texte werden auf dem Stud.IP-Server verschlüsselt gespeichert. Nicht einmal ein Admin des Stud.IP kann die Texte mitlesen - nicht einmal mit Datenbankzugriff! Nur die Teilnehmer der Veranstaltung können die Texte lesen. Die Verschlüsselung und Entschlüsselung funktioniert im Browser der Nutzer mit PGP in Javascript. Die Nutzer müssen nur ein zusätzliches Passwort eingeben und bekommen von der ganzen Technik unter der Haube kaum etwas mit.
