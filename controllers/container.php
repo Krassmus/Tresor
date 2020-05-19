@@ -59,6 +59,35 @@ class ContainerController extends PluginController
             throw new AccessDeniedException();
         }
         if (Request::isPost()) {
+            if (Config::get()->TRESOR_ACCEPT_FILETYPES) {
+                $allowed = false;
+                $parts = preg_split(
+                    "/\s*,\s*/",
+                    Config::get()->TRESOR_ACCEPT_FILETYPES,
+                    -1,
+                    PREG_SPLIT_NO_EMPTY
+                );
+                foreach ($parts as $part) {
+                    if ($part["0"] === ".") {
+                        if (mb_stripos(Request::get("name"), $part) === mb_strlen(Request::get("name")) - strlen($part)) {
+                            $allowed = true;
+                            break;
+                        }
+                    }
+                    if (mb_stripos($part, "/") !== false) {
+                        $type = mb_substr($part, 0, strpos($part, "/"));
+                        if (mb_stripos(Request::get("mime_type", "text/plain"), $type) === 0) {
+                            $allowed = true;
+                            break;
+                        }
+                    }
+                }
+                if (!$allowed) {
+                    PageLayout::postMessage(MessageBox::error(_("Dateien dieses Typs sind nicht erlaubt.")));
+                    $this->redirect("container/index");
+                    return;
+                }
+            }
             $this->container['name'] = Request::get("name");
             $this->container['mime_type'] = Request::get("mime_type", "text/plain");
             $this->container['encrypted_content'] = Request::get("encrypted_content");
