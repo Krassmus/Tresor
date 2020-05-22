@@ -102,6 +102,78 @@ class ContainerController extends PluginController
         }
     }
 
+    public function upload_action($tresor_id = null)
+    {
+        $this->container = new TresorContainer($tresor_id);
+        if (($tresor_id && !$GLOBALS['perm']->have_studip_perm("autor", $this->container['seminar_id']))
+            || (!$tresor_id && !$GLOBALS['perm']->have_studip_perm("autor", Context::get()->id))) {
+            throw new AccessDeniedException();
+        }
+        if (Request::isPost() && $_FILES['file']['tmp_name'] && filesize($_FILES['file']['tmp_name'])) {
+            $name = $_FILES['file']['name'];
+            $mime_type = $_FILES['file']['type'];
+            if (Config::get()->TRESOR_ACCEPT_FILETYPES) {
+                $allowed = false;
+                $parts = preg_split(
+                    "/\s*,\s*/",
+                    Config::get()->TRESOR_ACCEPT_FILETYPES,
+                    -1,
+                    PREG_SPLIT_NO_EMPTY
+                );
+                foreach ($parts as $part) {
+                    if ($part["0"] === ".") {
+                        if (mb_stripos($name, $part) === mb_strlen($name) - strlen($part)) {
+                            $allowed = true;
+                            break;
+                        }
+                    }
+                    if (mb_stripos($part, "/") !== false) {
+                        $type = mb_substr($part, 0, strpos($part, "/"));
+                        if (mb_stripos($mime_type, $type) === 0) {
+                            $allowed = true;
+                            break;
+                        }
+                    }
+                }
+                if (!$allowed) {
+                    PageLayout::postMessage(MessageBox::error(_("Dateien dieses Typs sind nicht erlaubt.")));
+                    $this->render_json([
+                        'ok' => 0,
+                        'description' => "Dateien dieses Typs sind nicht erlaubt."
+                    ]);
+                    return;
+                }
+            }
+            $this->container['name'] = $name;
+            $this->container['mime_type'] = $mime_type;
+            $this->container['last_user_id'] = User::findCurrent()->id;
+            if ($this->container->isNew()) {
+                $this->container['seminar_id'] = Context::get()->id;
+            }
+            $this->container['chdate'] = time();
+            $this->container->store();
+            $success = move_uploaded_file($_FILES['file']['tmp_name'], $this->container->getFilePath());
+            if ($success) {
+                PageLayout::postMessage(MessageBox::success(_("Daten wurden verschlüsselt und gespeichert.")));
+                $this->render_json([
+                    'ok' => 1,
+                    'data' => $this->container->toRawArray()
+                ]);
+            } else {
+                PageLayout::postMessage(MessageBox::error(_("Datei konnte nicht kopiert werden.")));
+                $this->render_json([
+                    'ok' => 0,
+                    'description' => "Datei konnte nicht kopiert werden."
+                ]);
+            }
+        } else {
+            $this->render_json([
+                'ok' => 0,
+                'description' => "Datei ist nicht gefunden worden."
+            ]);
+        }
+    }
+
     public function create_action()
     {
         if (Request::isPost()) {
@@ -127,18 +199,6 @@ class ContainerController extends PluginController
             PageLayout::postSuccess(_("Objekt wurde gelöscht."));
             $this->redirect("container/index");
         }
-    }
-
-    public function update_action($tresor_id)
-    {
-        $this->container = new TresorContainer($tresor_id);
-        if (!$GLOBALS['perm']->have_studip_perm("tutor", $this->container['seminar_id'])) {
-            throw new AccessDeniedException();
-        }
-        $this->container['encrypted_content'] = Request::get("encrypted_content");
-        $this->container['chdate'] = time();
-        $this->container->store();
-        $this->render_text("updated");
     }
 
     public function get_updatable_for_course_action($course_id)

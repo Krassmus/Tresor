@@ -95,16 +95,44 @@ STUDIP.Tresor = {
             };
             var time = new Date();
             openpgp.encrypt(options).then(function(ciphertext) {
-                jQuery("#uploadform input[name=encrypted_content]").val(ciphertext.data.replace(/\r/, "")); // '-----BEGIN PGP MESSAGE ... END PGP MESSAGE-----'
-                jQuery("#uploadform [name=name]").val(file.name);
-                jQuery("#uploadform [name=mime_type]").val(file.type);
-                jQuery("#content").val("");
-
                 var new_time = new Date();
-                jQuery("#uploadform").submit();
+
+                let text = ciphertext.data.replace(/\r/, "");
+
+                let b = new File(
+                    [text],
+                    file.name,
+                    {
+                        type: file.type
+                    }
+                );
+                STUDIP.Tresor.uploadEncryptedFile(
+                    b,
+                    jQuery("#uploadform [name=container_id]").val() || "",
+                    function () {
+
+                    }
+                ).then(function () {
+                    location.reload();
+                });
+
             });
         };
         reader.readAsDataURL(file);
+    },
+    uploadEncryptedFile: function (file, container_id) {
+        let data = new FormData();
+        data.append(`file`, file, file.name.normalize());
+
+        let prom = new Promise(function (resolve, reject) {
+            var request = new XMLHttpRequest();
+            request.open('POST', STUDIP.URLHelper.getURL(`plugins.php/tresor/container/upload/` + container_id));
+            request.addEventListener('loadend', function (event) {
+                resolve(JSON.parse(request.response));
+            });
+            request.send(data);
+        });
+        return prom;
     },
     downloadFile: function () {
         if (jQuery("#encrypted_content").val()) {
@@ -163,8 +191,20 @@ STUDIP.Tresor = {
             publicKeys: keys,  // for encryption
         };
         openpgp.encrypt(options).then(function (ciphertext) {
-            jQuery("#encrypted_content").val(ciphertext.data.replace(/\r/, "")); // '-----BEGIN PGP MESSAGE ... END PGP MESSAGE-----'
-            jQuery("#encrypted_content").closest("form").submit();
+            let text = ciphertext.data.replace(/\r/, "");
+            let b = new File(
+                [text],
+                $("#content_form input[name=name]").val(),
+                {
+                    type: $("#content_form input[name=mime_type]").val()
+                }
+            );
+            STUDIP.Tresor.uploadEncryptedFile(
+                b,
+                jQuery("#content_form [name=container_id]").val() || ""
+            ).then(function () {
+                location.reload();
+            });
         });
     },
 
@@ -334,23 +374,29 @@ STUDIP.Tresor = {
                                     publicKeys: keys,  // for encryption
                                 };
                                 openpgp.encrypt(options).then(function (ciphertext) {
-                                    let encrypted_content = ciphertext.data.replace(/\r/, "");
                                     finished++;
                                     jQuery(".uploadbar").css("background-size", Math.floor(100 * finished / (2 * number)) + "% 100%");
-                                    jQuery.ajax({
-                                        "url": STUDIP.URLHelper.getURL("plugins.php/tresor/container/update/" + containers[i].tresor_id),
-                                        "data": {
-                                            "encrypted_content": encrypted_content
-                                        },
-                                        "type": "post",
-                                        "success": function () {
-                                            finished++;
-                                            jQuery(".uploadbar").css("background-size", Math.floor(100 * finished / (2 * number)) + "% 100%");
-                                            if (finished === 2 * number) {
-                                                location.reload();
-                                            }
+
+                                    let text = ciphertext.data.replace(/\r/, "");
+
+                                    let b = new File(
+                                        [text],
+                                        containers[i].name,
+                                        {
+                                            type: containers[i].mime_type
+                                        }
+                                    );
+                                    STUDIP.Tresor.uploadEncryptedFile(
+                                        b,
+                                        containers[i].tresor_id
+                                    ).then(function () {
+                                        finished++;
+                                        jQuery(".uploadbar").css("background-size", Math.floor(100 * finished / (2 * number)) + "% 100%");
+                                        if (finished === 2 * number) {
+                                            location.reload();
                                         }
                                     });
+
 
                                 });
                             }, function (error) {

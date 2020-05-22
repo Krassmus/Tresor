@@ -22,6 +22,7 @@
     <input type="hidden" name="encrypted_content" id="encrypted_content" value="<?= htmlReady($container['encrypted_content']) ?>">
 
     <input type="hidden" name="mime_type" value="<?= htmlReady($container['mime_type']) ?>">
+    <input type="hidden" name="container_id" value="<?= htmlReady($container->getId()) ?>">
 
     <textarea id="content"
               class="onlytext"
@@ -47,10 +48,6 @@
 
     <? if ($container['mime_type'] && $container['mime_type'] !== "text/plain") : ?>
         <?= \Studip\LinkButton::create(_("Datei hochladen"), "#", array('onClick' => "jQuery('#file_upload').trigger('click'); return false;")) ?>
-    <? else : ?>
-        <? if ($container->isNew()) : ?>
-            <?= \Studip\LinkButton::create(_("Text eingeben"), "#", array('onClick' => "STUDIP.Tresor.selectText(); return false;")) ?>
-        <? endif ?>
     <? endif ?>
 
     <?= \Studip\LinkButton::create(_("Speichern"), "#", array('onClick' => "STUDIP.Tresor.storeContainer(); return false;")) ?>
