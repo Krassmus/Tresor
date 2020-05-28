@@ -208,10 +208,12 @@ STUDIP.Tresor = {
         });
     },
 
-    decryptContainer: function () {
+    decryptContainer: function (passphrase) {
         if (jQuery("#encrypted_content").val()) {
-            var passphrase = sessionStorage.getItem("STUDIP.Tresor.passphrase");
-            if (!passphrase) {
+            if (!passphrase || typeof passphrase !== "string") {
+                passphrase = sessionStorage.getItem("STUDIP.Tresor.passphrase");
+            }
+            if (!passphrase || typeof passphrase !== "string") {
                 STUDIP.Tresor.askForPassphrase(false);
             } else {
                 var my_key = jQuery("#my_key").data("private_key");
@@ -318,6 +320,8 @@ STUDIP.Tresor = {
                         "ui-dialog": "front"
                     }
                 });
+            } else {
+                jQuery("#question_passphrase").dialog("open");
             }
             jQuery("#question_passphrase [name=passphrase]").focus();
             if (wrong) {
@@ -328,6 +332,7 @@ STUDIP.Tresor = {
 
     extractPrivateKey: function () {
         var passphrase = jQuery("#question_passphrase [name=passphrase]").val();
+
         //Private Key
         var my_key = jQuery("#my_key").data("private_key");
         my_key = openpgp.key.readArmored(my_key);
@@ -338,9 +343,17 @@ STUDIP.Tresor = {
             STUDIP.Tresor.askForPassphrase(true);
             return;
         } else {
-            sessionStorage.setItem("STUDIP.Tresor.passphrase", passphrase);
+            if (jQuery("#question_passphrase [name=save_password]").val() !== STUDIP.Tresor.savePassword) {
+                STUDIP.Tresor.savePassword = jQuery("#question_passphrase [name=save_password]").val();
+                jQuery.post(STUDIP.URLHelper.getURL("plugins.php/tresor/userdata/set_save_password"), {
+                    save_password: STUDIP.Tresor.savePassword
+                });
+            }
+            if (STUDIP.Tresor.savePassword !== "never") {
+                sessionStorage.setItem("STUDIP.Tresor.passphrase", passphrase);
+            }
             jQuery("#question_passphrase").dialog("close");
-            STUDIP.Tresor.decryptContainer();
+            STUDIP.Tresor.decryptContainer(passphrase);
         }
     },
 
@@ -406,7 +419,16 @@ STUDIP.Tresor = {
                 }
             });
         }
+    },
+    cleanup: function () {
+        if (STUDIP.Tresor.savePassword !== "save") {
+            sessionStorage.setItem("STUDIP.Tresor.passphrase", "");
+        }
     }
 
 
 };
+
+$(function () {
+    window.addEventListener("unload", STUDIP.Tresor.cleanup);
+})

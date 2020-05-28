@@ -52,6 +52,23 @@
             <input type="password" name="passphrase" autocomplete="off">
         </label>
 
-        <?= \Studip\LinkButton::create(_("Entschlüsseln"), "#", array('onclick' => "STUDIP.Tresor.extractPrivateKey(); return false;")) ?>
+        <label>
+            <?= _("Passwort speichern ...") ?>
+            <select name="save_password">
+                <option value="save"<?= $GLOBALS['user']->cfg->TRESOR_SAVE_PASSWORD === "save" ? " selected": "" ?>>
+                    <?= _("bis zum Ausloggen") ?>
+                </option>
+                <option value="thispage"<?= $GLOBALS['user']->cfg->TRESOR_SAVE_PASSWORD === "thispage" ? " selected": "" ?>>
+                    <?= _("nur für diese Seite") ?>
+                </option>
+                <option value="never"<?= $GLOBALS['user']->cfg->TRESOR_SAVE_PASSWORD === "never" ? " selected": "" ?>>
+                    <?= _("gar nicht.") ?>
+                </option>
+            </select>
+        </label>
+
+        <div data-dialog-button>
+            <?= \Studip\LinkButton::create(_("Entschlüsseln"), "#", array('onclick' => "STUDIP.Tresor.extractPrivateKey(); return false;")) ?>
+        </div>
     </form>
 </div>

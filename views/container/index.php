@@ -70,11 +70,11 @@
 
 <script>
     jQuery(function () {
-        //jQuery("table.sortable").tablesorter();
         STUDIP.Tresor.keyToEncryptFor = <?= json_encode(array_map(
             function ($key) { return $key['public_key']; },
             $foreign_user_public_keys
         )) ?>;
+        STUDIP.Tresor.savePassword = '<? htmlReady($GLOBALS['user']->cfg->TRESOR_SAVE_PASSWORD ?: "save") ?>';
     });
 </script>
 

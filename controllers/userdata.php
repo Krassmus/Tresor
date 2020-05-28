@@ -34,4 +34,12 @@ class UserdataController extends PluginController {
     public function create_new_key_action() {
 
     }
+
+    public function set_save_password_action()
+    {
+        if (Request::isPost()) {
+            $GLOBALS['user']->cfg->store('TRESOR_SAVE_PASSWORD', Request::get("save_password"));
+        }
+        $this->render_nothing();
+    }
 }
