@@ -356,69 +356,72 @@ STUDIP.Tresor = {
             STUDIP.Tresor.decryptContainer(passphrase);
         }
     },
-
+    askForUpdatingEncryption: function () {
+        STUDIP.Dialog.confirm(
+            $('.update_encryption_confirmquestion').data("confirmquestion"),
+            STUDIP.Tresor.updateEncryption
+        );
+    },
     updateEncryption: function () {
-        if (window.confirm("Wirklich aktualisieren?")) {
-            let course_id = STUDIP.URLHelper.parameters.cid;
-            jQuery.ajax({
-                "url": STUDIP.URLHelper.getURL("plugins.php/tresor/container/get_updatable_for_course/" + course_id),
-                "dataType": "json",
-                "success": function (containers) {
-                    if (!containers.length) {
-                        alert("Nichts zu tun.");
-                        return;
-                    }
-                    let number = containers.length;
-                    let finished = 0;
-                    jQuery("#dialog_wait_renew_containers").dialog({
-                        "modal": true,
-                        "title": jQuery("#dialog_wait_renew_containers").data("title")
-                    });
-                    var keys = [];
-                    for (var i in STUDIP.Tresor.keyToEncryptFor) {
-                        var publicKey = openpgp.key.readArmored(STUDIP.Tresor.keyToEncryptFor[i]);
-                        keys.push(publicKey.keys[0]);
-                    }
-                    for (let i in containers) {
-                        if (containers[i].encrypted_content) {
-                            STUDIP.Tresor.decryptText(containers[i].encrypted_content).then(function (plaintext) {
-                                var options = {
-                                    data: plaintext,     // input as String (or Uint8Array)
-                                    publicKeys: keys,  // for encryption
-                                };
-                                openpgp.encrypt(options).then(function (ciphertext) {
+        let course_id = STUDIP.URLHelper.parameters.cid;
+        jQuery.ajax({
+            "url": STUDIP.URLHelper.getURL("plugins.php/tresor/container/get_updatable_for_course/" + course_id),
+            "dataType": "json",
+            "success": function (containers) {
+                if (!containers.length) {
+                    alert("Nichts zu tun.");
+                    return;
+                }
+                let number = containers.length;
+                let finished = 0;
+                jQuery("#dialog_wait_renew_containers").dialog({
+                    "modal": true,
+                    "title": jQuery("#dialog_wait_renew_containers").data("title")
+                });
+                var keys = [];
+                for (var i in STUDIP.Tresor.keyToEncryptFor) {
+                    var publicKey = openpgp.key.readArmored(STUDIP.Tresor.keyToEncryptFor[i]);
+                    keys.push(publicKey.keys[0]);
+                }
+                for (let i in containers) {
+                    if (containers[i].encrypted_content) {
+                        STUDIP.Tresor.decryptText(containers[i].encrypted_content).then(function (plaintext) {
+                            var options = {
+                                data: plaintext,     // input as String (or Uint8Array)
+                                publicKeys: keys,  // for encryption
+                            };
+                            openpgp.encrypt(options).then(function (ciphertext) {
+                                finished++;
+                                jQuery(".uploadbar").css("background-size", Math.floor(100 * finished / (2 * number)) + "% 100%");
+
+                                let text = ciphertext.data.replace(/\r/, "");
+
+                                let b = new File(
+                                    [text],
+                                    containers[i].name,
+                                    {
+                                        type: containers[i].mime_type
+                                    }
+                                );
+                                STUDIP.Tresor.uploadEncryptedFile(
+                                    b,
+                                    containers[i].tresor_id
+                                ).then(function () {
                                     finished++;
                                     jQuery(".uploadbar").css("background-size", Math.floor(100 * finished / (2 * number)) + "% 100%");
-
-                                    let text = ciphertext.data.replace(/\r/, "");
-
-                                    let b = new File(
-                                        [text],
-                                        containers[i].name,
-                                        {
-                                            type: containers[i].mime_type
-                                        }
-                                    );
-                                    STUDIP.Tresor.uploadEncryptedFile(
-                                        b,
-                                        containers[i].tresor_id
-                                    ).then(function () {
-                                        finished++;
-                                        jQuery(".uploadbar").css("background-size", Math.floor(100 * finished / (2 * number)) + "% 100%");
-                                        if (finished === 2 * number) {
-                                            location.reload();
-                                        }
-                                    });
-
-
+                                    if (finished === 2 * number) {
+                                        location.reload();
+                                    }
                                 });
-                            }, function (error) {
+
+
                             });
-                        }
+                        }, function (error) {
+                        });
                     }
                 }
-            });
-        }
+            }
+        });
     },
     cleanup: function () {
         if (STUDIP.Tresor.savePassword !== "save") {

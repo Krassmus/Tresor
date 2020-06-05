@@ -52,7 +52,7 @@ class TresorContainer extends SimpleORMap {
             return false;
         }
         $statement = DBManager::get()->prepare("
-            SELECT 1
+            SELECT DISTINCT seminar_user.user_id
             FROM tresor_container
                 INNER JOIN seminar_user ON (tresor_container.seminar_id = seminar_user.Seminar_id)
                 LEFT JOIN tresor_user_keys ON (seminar_user.user_id = tresor_user_keys.user_id)
@@ -65,7 +65,8 @@ class TresorContainer extends SimpleORMap {
         $statement->execute(array(
             'tresor_id' => $this->getId()
         ));
-        return (bool) $statement->fetch(PDO::FETCH_COLUMN, 0);
+        $user_ids = $statement->fetchAll(PDO::FETCH_COLUMN, 0);
+        return count($user_ids) ? $user_ids : false;
     }
 
 }

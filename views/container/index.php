@@ -1,6 +1,8 @@
 <? if ($donothing) {
     return;
-} ?>
+}
+$todo = [];
+?>
 <?= $this->render_partial("container/_user_key.php") ?>
 <? $my_key = TresorUserKey::findMine() ?>
 
@@ -20,10 +22,12 @@
             <? $new = ($container['chdate'] > Request::int("highlight")) && ($container['last_user_id'] !== $GLOBALS['user']->id) ?>
             <tr<?= $new ? ' class="new"' : "" ?>>
                 <td>
-                    <? if ($container->needsReencryption()) {
+                    <?
+                    $whoNeedsEncryption = $container->needsReencryption();
+                    if ($whoNeedsEncryption) {
                         echo Icon::create("exclaim-circle", "info")->asImg(20, ['class' => "text-bottom", 'title' => _("Dieses Objekt muss noch einmal verschlüsselt werden, damit alle Teilnehmer*innen der Veranstaltung es sehen können.")]);
                         if ($my_key['chdate'] <= $container['chdate']) {
-                            $todo = true;
+                            $todo = array_merge($todo, $whoNeedsEncryption);
                         }
                     } ?>
                 </td>
@@ -96,7 +100,7 @@
            style="display: none;">
 <? endif ?>
 
-<? if ($todo && $GLOBALS['perm']->have_studip_perm("tutor", Context::get()->id)) : ?>
+<? if (count($todo) && $GLOBALS['perm']->have_studip_perm("tutor", Context::get()->id)) : ?>
     <div id="dialog_wait_renew_containers"
          data-title="<?= _("Daten werden verschlüsselt ...") ?>"
          style="display: none;">
@@ -130,11 +134,20 @@ if ($my_key) {
         );
     }
     if ($todo && $GLOBALS['perm']->have_studip_perm("tutor", Context::get()->id)) {
+        $todo = array_unique($todo);
+        foreach ($todo as $key => $user_id) {
+            $todo[$key] = get_fullname($user_id, "no_title");
+        }
+        sort($todo);
         $actions->addLink(
             _("Dateien aktualisieren für neue Schlüssel"),
             PluginEngine::getURL($plugin, array(), "container/update_encryption"),
             Icon::create("refresh", "clickable"),
-            array('onclick' => "STUDIP.Tresor.updateEncryption(); return false;")
+            array(
+                'class' => "update_encryption_confirmquestion",
+                'onclick' => "STUDIP.Tresor.askForUpdatingEncryption(); return false;",
+                'data-confirmquestion' => sprintf(_("Wirklich für %s neu verschlüsseln?"), implode(", ", $todo))
+            )
         );
     }
 } elseif(!$GLOBALS['perm']->have_perm("admin")) {
