@@ -34,6 +34,7 @@
             <video id="tresor_decrypted_preview"
                    autoplay
                    controls
+                   <?= !Config::get()->TRESOR_ALLOW_DOWNLOAD ? 'controlsList="nodownload"' : "" ?>
                    class="<?= !Config::get()->TRESOR_ALLOW_DOWNLOAD ? "prevent_download" : "" ?>"
                     <?= !Config::get()->TRESOR_ALLOW_DOWNLOAD ? ' oncontextmenu="return false;"' : '' ?>
                    src="">
