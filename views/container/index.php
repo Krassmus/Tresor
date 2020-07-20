@@ -31,13 +31,13 @@ $todo = [];
                         }
                         sort($whoNeedsEncryption);
                         ?>
-                        <? if ($my_key['chdate'] <= $container['chdate']) : ?>
+                        <? if ($my_key['chdate'] <= $container['chdate'] && $GLOBALS['perm']->have_studip_perm("tutor", Context::get()->id)) : ?>
                             <a href="<?= PluginEngine::getURL($plugin, array('container_id' => $container->getId()), "container/update_encryption") ?>"
                                data-confirmquestion="<?= sprintf(_("Wirklich für %s neu verschlüsseln?"), implode(", ", $whoNeedsEncryption)) ?>"
                                onclick="STUDIP.Tresor.askForUpdatingEncryption.call(this, '<?= htmlReady($container->getId()) ?>'); return false;">
                         <? endif ?>
-                        <?= Icon::create("exclaim-circle", $my_key['chdate'] <= $container['chdate'] ? "clickable" : "info")->asImg(20, ['class' => "text-bottom", 'title' => _("Dieses Objekt muss noch einmal verschlüsselt werden, damit alle Teilnehmer*innen der Veranstaltung es sehen können.")]) ?>
-                        <? if ($my_key['chdate'] <= $container['chdate']) : ?>
+                        <?= Icon::create("exclaim-circle", $my_key['chdate'] <= $container['chdate']  && $GLOBALS['perm']->have_studip_perm("tutor", Context::get()->id) ? "clickable" : "info")->asImg(20, ['class' => "text-bottom", 'title' => _("Dieses Objekt muss noch einmal verschlüsselt werden, damit alle Teilnehmer*innen der Veranstaltung es sehen können.")]) ?>
+                        <? if ($my_key['chdate'] <= $container['chdate'] && $GLOBALS['perm']->have_studip_perm("tutor", Context::get()->id)) : ?>
                             </a>
                         <? endif ?>
                     <? endif ?>
