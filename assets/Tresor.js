@@ -6,6 +6,7 @@ STUDIP.Tresor = {
             width: 400
         });
     },
+    temporaryContainer_id: null,
     setPassword: function () {
         if (jQuery("#tresor_password").val().length < 10) {
             alert("Passwort ist kleiner als 10 Zeichen. Etwas sicherer sollte es schon sein.");
@@ -356,9 +357,10 @@ STUDIP.Tresor = {
             STUDIP.Tresor.decryptContainer(passphrase);
         }
     },
-    askForUpdatingEncryption: function () {
+    askForUpdatingEncryption: function (container_id) {
+        STUDIP.Tresor.temporaryContainer_id = container_id;
         STUDIP.Dialog.confirm(
-            $('.update_encryption_confirmquestion').data("confirmquestion"),
+            $(this).data("confirmquestion"),
             STUDIP.Tresor.updateEncryption
         );
     },
@@ -366,6 +368,9 @@ STUDIP.Tresor = {
         let course_id = STUDIP.URLHelper.parameters.cid;
         jQuery.ajax({
             "url": STUDIP.URLHelper.getURL("plugins.php/tresor/container/get_updatable_for_course/" + course_id),
+            "data": {
+                "container_id": STUDIP.Tresor.temporaryContainer_id
+            },
             "dataType": "json",
             "success": function (containers) {
                 if (!containers.length) {
@@ -422,6 +427,7 @@ STUDIP.Tresor = {
                 }
             }
         });
+        STUDIP.Tresor.temporaryContainer_id = null;
     },
     cleanup: function () {
         if (STUDIP.Tresor.savePassword !== "save") {

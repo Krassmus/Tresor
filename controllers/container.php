@@ -211,7 +211,12 @@ class ContainerController extends PluginController
             throw new Exception("Sie sind abgemeldet oder haben noch keinen eigenen Schlüssel.");
         }
         $data = [];
-        foreach (TresorContainer::findBySQL("seminar_id = ? ORDER BY name", array($course_id)) as $container) {
+        if (Request::option("container_id")) {
+            $containers = TresorContainer::findBySQL("seminar_id = ? AND tresor_id = ?", array($course_id, Request::option("container_id")));
+        } else {
+            $containers = TresorContainer::findBySQL("seminar_id = ? ORDER BY name", array($course_id));
+        }
+        foreach ($containers as $container) {
             if ($my_key['chdate'] <= $container['chdate']
                     && $container->needsReencryption()) {
                 $d = $container->toRawArray();

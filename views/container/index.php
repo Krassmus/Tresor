@@ -22,14 +22,25 @@ $todo = [];
             <? $new = ($container['chdate'] > Request::int("highlight")) && ($container['last_user_id'] !== $GLOBALS['user']->id) ?>
             <tr<?= $new ? ' class="new"' : "" ?>>
                 <td>
-                    <?
-                    $whoNeedsEncryption = $container->needsReencryption();
-                    if ($whoNeedsEncryption) {
-                        echo Icon::create("exclaim-circle", "info")->asImg(20, ['class' => "text-bottom", 'title' => _("Dieses Objekt muss noch einmal verschlüsselt werden, damit alle Teilnehmer*innen der Veranstaltung es sehen können.")]);
-                        if ($my_key['chdate'] <= $container['chdate']) {
-                            $todo = array_merge($todo, $whoNeedsEncryption);
+                    <? $whoNeedsEncryption = $container->needsReencryption() ?>
+                    <? if ($whoNeedsEncryption) : ?>
+                        <?
+                        $todo = array_merge($todo, $whoNeedsEncryption);
+                        foreach ($whoNeedsEncryption as $key => $user_id) {
+                            $whoNeedsEncryption[$key] = get_fullname($user_id, "no_title");
                         }
-                    } ?>
+                        sort($whoNeedsEncryption);
+                        ?>
+                        <? if ($my_key['chdate'] <= $container['chdate']) : ?>
+                            <a href="<?= PluginEngine::getURL($plugin, array('container_id' => $container->getId()), "container/update_encryption") ?>"
+                               data-confirmquestion="<?= sprintf(_("Wirklich für %s neu verschlüsseln?"), implode(", ", $whoNeedsEncryption)) ?>"
+                               onclick="STUDIP.Tresor.askForUpdatingEncryption.call(this, '<?= htmlReady($container->getId()) ?>'); return false;">
+                        <? endif ?>
+                        <?= Icon::create("exclaim-circle", $my_key['chdate'] <= $container['chdate'] ? "clickable" : "info")->asImg(20, ['class' => "text-bottom", 'title' => _("Dieses Objekt muss noch einmal verschlüsselt werden, damit alle Teilnehmer*innen der Veranstaltung es sehen können.")]) ?>
+                        <? if ($my_key['chdate'] <= $container['chdate']) : ?>
+                            </a>
+                        <? endif ?>
+                    <? endif ?>
                 </td>
                 <td>
                     <? if (!$GLOBALS['perm']->have_perm("admin") && $my_key) : ?>
@@ -145,7 +156,7 @@ if ($my_key) {
             Icon::create("refresh", "clickable"),
             array(
                 'class' => "update_encryption_confirmquestion",
-                'onclick' => "STUDIP.Tresor.askForUpdatingEncryption(); return false;",
+                'onclick' => "STUDIP.Tresor.askForUpdatingEncryption.call(this); return false;",
                 'data-confirmquestion' => sprintf(_("Wirklich für %s neu verschlüsseln?"), implode(", ", $todo))
             )
         );
