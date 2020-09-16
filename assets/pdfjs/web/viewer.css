@@ -2403,27 +2403,27 @@ html[dir='rtl'] #documentPropertiesOverlay .row > * {
   #outerContainer .hiddenLargeView {
     display: none;
   }
-  #outerContainer .visibleLargeView {
+ /* #outerContainer .visibleLargeView {
     display: inherit;
-  }
+  }*/
 }
 
 @media all and (max-width: 700px) {
   #outerContainer .hiddenMediumView {
     display: none;
   }
-  #outerContainer .visibleMediumView {
+  /*#outerContainer .visibleMediumView {
     display: inherit;
-  }
+  }*/
 }
 
 @media all and (max-width: 640px) {
   .hiddenSmallView, .hiddenSmallView * {
     display: none;
   }
-  .visibleSmallView {
+ /* .visibleSmallView {
     display: inherit;
-  }
+  }*/
   .toolbarButtonSpacer {
     width: 0;
   }
