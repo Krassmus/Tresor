@@ -15,9 +15,9 @@ class ContainerController extends PluginController
         $setting = TresorSetting::find(Context::get()->id);
         $name = $setting && $setting['tabname'] ? $setting['tabname'] : Config::get()->TRESOR_GLOBALS_NAME;
         PageLayout::setTitle($name);
-        Helpbar::Get()->addPlainText(Config::get()->TRESOR_GLOBALS_NAME, _("Der Tresor ist ein Bereich in Ihrer Veranstaltung, der besonders gesicherte Inhalte beinhalten kann. Sie brauchen deswegen auch ein zweites Passwort nur für den Tresor. Selbst die Admins von Stud.IP sind nicht in der Lage, die Inhalte des Tresors auszulesen. Das können nur Sie und die anderen Mitlesenden der Veranstaltung."));
+        Helpbar::Get()->addPlainText(Config::get()->TRESOR_GLOBALS_NAME, dgettext("tresor","Der Tresor ist ein Bereich in Ihrer Veranstaltung, der besonders gesicherte Inhalte beinhalten kann. Sie brauchen deswegen auch ein zweites Passwort nur für den Tresor. Selbst die Admins von Stud.IP sind nicht in der Lage, die Inhalte des Tresors auszulesen. Das können nur Sie und die anderen Mitlesenden der Veranstaltung."));
         if (\Studip\ENV === "production" && $_SERVER['HTTPS'] !== 'on') {
-            PageLayout::postError(sprintf(_("Diese Seite ist nicht mit HTTPS abgesichert. %s ist so nicht sicher."), Config::get()->TRESOR_GLOBALS_NAME));
+            PageLayout::postError(sprintf(dgettext("tresor","Diese Seite ist nicht mit HTTPS abgesichert. %s ist so nicht sicher."), Config::get()->TRESOR_GLOBALS_NAME));
             $this->donothing = true;
         }
     }
@@ -25,7 +25,7 @@ class ContainerController extends PluginController
     public function index_action()
     {
         if ($GLOBALS['perm']->have_perm("admin")) {
-            PageLayout::postMessage(MessageBox::info(_("Sie sind Admin und nicht Mitglied dieser Veranstaltung. Die vorliegenden Dokumente sind nicht für Sie verschlüsselt.")));
+            PageLayout::postMessage(MessageBox::info(dgettext("tresor","Sie sind Admin und nicht Mitglied dieser Veranstaltung. Die vorliegenden Dokumente sind nicht für Sie verschlüsselt.")));
         }
 
         $this->foreign_user_public_keys = TresorUserKey::findForSeminar(Context::get()->id);
@@ -48,7 +48,7 @@ class ContainerController extends PluginController
         if (!$GLOBALS['perm']->have_studip_perm("autor", $this->container['seminar_id'])) {
             throw new AccessDeniedException();
         }
-        PageLayout::setTitle(sprintf(_("%s bearbeiten"), $this->container['name']));
+        PageLayout::setTitle(sprintf(dgettext("tresor","%s bearbeiten"), $this->container['name']));
         $this->foreign_user_public_keys = TresorUserKey::findForSeminar($this->container['seminar_id']);
     }
 
@@ -83,7 +83,7 @@ class ContainerController extends PluginController
                     }
                 }
                 if (!$allowed) {
-                    PageLayout::postMessage(MessageBox::error(_("Dateien dieses Typs sind nicht erlaubt.")));
+                    PageLayout::postMessage(MessageBox::error(dgettext("tresor","Dateien dieses Typs sind nicht erlaubt.")));
                     $this->redirect("container/index");
                     return;
                 }
@@ -97,7 +97,7 @@ class ContainerController extends PluginController
             }
             $this->container['chdate'] = time();
             $this->container->store();
-            PageLayout::postMessage(MessageBox::success(_("Daten wurden verschlüsselt und gespeichert.")));
+            PageLayout::postMessage(MessageBox::success(dgettext("tresor","Daten wurden verschlüsselt und gespeichert.")));
             $this->redirect("container/index");
         }
     }
@@ -136,7 +136,7 @@ class ContainerController extends PluginController
                     }
                 }
                 if (!$allowed) {
-                    PageLayout::postMessage(MessageBox::error(_("Dateien dieses Typs sind nicht erlaubt.")));
+                    PageLayout::postMessage(MessageBox::error(dgettext("tresor","Dateien dieses Typs sind nicht erlaubt.")));
                     $this->render_json([
                         'ok' => 0,
                         'description' => "Dateien dieses Typs sind nicht erlaubt."
@@ -154,13 +154,13 @@ class ContainerController extends PluginController
             $this->container->store();
             $success = move_uploaded_file($_FILES['file']['tmp_name'], $this->container->getFilePath());
             if ($success) {
-                PageLayout::postMessage(MessageBox::success(_("Daten wurden verschlüsselt und gespeichert.")));
+                PageLayout::postMessage(MessageBox::success(dgettext("tresor","Daten wurden verschlüsselt und gespeichert.")));
                 $this->render_json([
                     'ok' => 1,
                     'data' => $this->container->toRawArray()
                 ]);
             } else {
-                PageLayout::postMessage(MessageBox::error(_("Datei konnte nicht kopiert werden.")));
+                PageLayout::postMessage(MessageBox::error(dgettext("tresor","Datei konnte nicht kopiert werden.")));
                 $this->render_json([
                     'ok' => 0,
                     'description' => "Datei konnte nicht kopiert werden."
@@ -183,7 +183,7 @@ class ContainerController extends PluginController
             $this->container['last_user_id'] = $GLOBALS['user']->id;
             $this->container['encrypted_content'] = "";
             $this->container->store();
-            PageLayout::postSuccess(_("Neuen Text initialisiert"));
+            PageLayout::postSuccess(dgettext("tresor","Neuen Text initialisiert"));
             $this->redirect("container/edit/".$this->container->getId());
         }
     }
@@ -196,7 +196,7 @@ class ContainerController extends PluginController
                 throw new AccessDeniedException();
             }
             $this->container->delete();
-            PageLayout::postSuccess(_("Objekt wurde gelöscht."));
+            PageLayout::postSuccess(dgettext("tresor","Objekt wurde gelöscht."));
             $this->redirect("container/index");
         }
     }
@@ -242,7 +242,7 @@ class ContainerController extends PluginController
             } else {
                 $this->setting->store();
             }
-            PageLayout::postMessage(MessageBox::success(_("Daten wurden gespeichert.")));
+            PageLayout::postMessage(MessageBox::success(dgettext("tresor","Daten wurden gespeichert.")));
             $this->redirect("container/index");
         }
     }

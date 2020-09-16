@@ -1,0 +1,17 @@
+#!/bin/sh
+
+#
+#  STEP 1:
+#  extract all tresor message strings and merge them with the existing translations
+#
+
+LOCALE_RELATIVE_PATH="."
+TRANSLATIONFILES_RELAVITVE_PATHS="../lib ../views ../controllers ../assets ../Tresor.class.php"
+
+for language in en
+do
+	test -f "$LOCALE_RELATIVE_PATH/$language/LC_MESSAGES/tresor.po" && mv "$LOCALE_RELATIVE_PATH/$language/LC_MESSAGES/tresor.po" "$LOCALE_RELATIVE_PATH/$language/LC_MESSAGES/tresor.po.old"
+	> "$LOCALE_RELATIVE_PATH/$language/LC_MESSAGES/tresor.pot"
+	find $TRANSLATIONFILES_RELAVITVE_PATHS \( -iname "*.php" -o -iname "*.ihtml" \) | xargs xgettext --from-code=utf-8 -j -n --language=PHP -o "$LOCALE_RELATIVE_PATH/$language/LC_MESSAGES/tresor.pot"
+	test -f "$LOCALE_RELATIVE_PATH/$language/LC_MESSAGES/tresor.po.old" && msgmerge "$LOCALE_RELATIVE_PATH/$language/LC_MESSAGES/tresor.po.old" "$LOCALE_RELATIVE_PATH/$language/LC_MESSAGES/tresor.pot" --output-file="$LOCALE_RELATIVE_PATH/$language/LC_MESSAGES/tresor.po"
+done

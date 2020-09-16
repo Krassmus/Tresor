@@ -6,7 +6,7 @@
 <?php endif ?>
 
 <div style="display: none;" id="encryption_error">
-    <?= MessageBox::error(_("Das Dokument kann leider nicht entschlüsselt werden. Vermutlich muss es erst von jemand anderem erneut gespeichert werden, damit Sie das lesen können.")) ?>
+    <?= MessageBox::error(dgettext("tresor","Das Dokument kann leider nicht entschlüsselt werden. Vermutlich muss es erst von jemand anderem erneut gespeichert werden, damit Sie das lesen können.")) ?>
 </div>
 
 <form action="<?= PluginEngine::getLink($plugin, array(), "container/store/".$container->getId()) ?>"
@@ -15,7 +15,7 @@
       id="content_form">
 
     <label>
-        <?= _("Name") ?>
+        <?= dgettext("tresor","Name") ?>
         <input type="text" name="name" value="<?= htmlReady($container['name']) ?>">
     </label>
 
@@ -27,7 +27,7 @@
     <textarea id="content"
               class="onlytext"
               style="width: calc(100% - 20px); height: calc(70vh);"
-              placeholder="<?= $container['encrypted_content'] ? _("Es wird entschlüsselt ...") : _("Text eingeben ...") ?>"></textarea>
+              placeholder="<?= $container['encrypted_content'] ? dgettext("tresor","Es wird entschlüsselt ...") : dgettext("tresor","Text eingeben ...") ?>"></textarea>
 
 
     <script>
@@ -47,9 +47,9 @@
 
 
     <? if ($container['mime_type'] && $container['mime_type'] !== "text/plain") : ?>
-        <?= \Studip\LinkButton::create(_("Datei hochladen"), "#", array('onClick' => "jQuery('#file_upload').trigger('click'); return false;")) ?>
+        <?= \Studip\LinkButton::create(dgettext("tresor","Datei hochladen"), "#", array('onClick' => "jQuery('#file_upload').trigger('click'); return false;")) ?>
     <? endif ?>
 
-    <?= \Studip\LinkButton::create(_("Speichern"), "#", array('onClick' => "STUDIP.Tresor.storeContainer(); return false;")) ?>
+    <?= \Studip\LinkButton::create(dgettext("tresor","Speichern"), "#", array('onClick' => "STUDIP.Tresor.storeContainer(); return false;")) ?>
 </div>
 

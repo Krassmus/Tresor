@@ -6,7 +6,7 @@
 <?php endif ?>
 
 <div style="display: none;" id="encryption_error">
-    <?= MessageBox::error(_("Das Dokument kann leider nicht entschlüsselt werden. Vermutlich muss es erst von jemand anderem erneut gespeichert werden, damit Sie das lesen können.")) ?>
+    <?= MessageBox::error(dgettext("tresor","Das Dokument kann leider nicht entschlüsselt werden. Vermutlich muss es erst von jemand anderem erneut gespeichert werden, damit Sie das lesen können.")) ?>
 </div>
 
 <form action="<?= PluginEngine::getLink($plugin, array(), "container/store/".$container->getId()) ?>"
@@ -25,7 +25,7 @@
               class="onlytext"
               style="width: calc(100% - 20px); height: calc(70vh);"
               readonly
-              placeholder="<?= $container['encrypted_content'] ? _("Es wird entschlüsselt ...") : _("Text eingeben ...") ?>"></textarea>
+              placeholder="<?= $container['encrypted_content'] ? dgettext("tresor","Es wird entschlüsselt ...") : dgettext("tresor","Text eingeben ...") ?>"></textarea>
 
 
     <div class="onlyfile">
@@ -61,7 +61,7 @@
         <div style="margin-top: 20px;">
             <a href="#" onClick="STUDIP.Tresor.downloadFile(); return false;">
                 <?= Icon::create("download", "clickable")->asImg("30px", ['class' => "text-bottom"]) ?>
-                <?= _("Datei herunterladen") ?>
+                <?= dgettext("tresor","Datei herunterladen") ?>
             </a>
         </div>
         <? endif ?>

@@ -8,6 +8,7 @@ class Tresor extends StudIPPlugin implements StandardPlugin, SystemPlugin {
 
     public function __construct()
     {
+        bindtextdomain("tresor", __DIR__."/locale");
         parent::__construct();
         if ($GLOBALS['user']->id === "nobody") {
             PageLayout::addHeadElement("script", array(), 'sessionStorage.setItem("STUDIP.Tresor.passphrase", "");');
@@ -51,7 +52,7 @@ class Tresor extends StudIPPlugin implements StandardPlugin, SystemPlugin {
         ));
         if ($new_container > 0) {
             $icon->setURL(PluginEngine::getURL($this, array('highlight' => $last_visit), "container/index"));
-            $icon->setImage(Icon::create("lock-locked", "new"), array('title' => $name." - ".sprintf(_("%s Änderungen"), $new_container)));
+            $icon->setImage(Icon::create("lock-locked", "new"), array('title' => $name." - ".sprintf(dgettext("tresor","%s Änderungen"), $new_container)));
         } else {
             $icon->setImage(Icon::create("lock-locked", "inactive"), array('title' => $name));
         }

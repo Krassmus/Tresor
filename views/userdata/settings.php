@@ -8,7 +8,7 @@
 <?
 $actions = new ActionsWidget();
 $actions->addLink(
-    _("Passwort vergessen?"),
+    dgettext("tresor","Passwort vergessen?"),
     PluginEngine::getURL($plugin, array(), "userdata/create_new_key"),
     Icon::create("key+decline", "info"),
     array('data-dialog' => 1)
