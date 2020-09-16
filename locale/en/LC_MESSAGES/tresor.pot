@@ -1,0 +1,214 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <jakob.diel@hs-wismar.de>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-09-16 15:20+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Jakob Diel <jakob.diel@hs-wismar.de\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: English \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../views/container/_user_key.php:9
+#, php-format
+msgid "Sie haben noch keinen Schlüssel für %s. %sJetzt erstellen.%s"
+msgstr "You do not yet have a key for %s. %sCreate now.%s"
+
+#: ../views/container/_user_key.php:11
+msgid "Wählen Sie ein sicheres Passwort aus"
+msgstr "Choose a secure password"
+
+#: ../views/container/_user_key.php:19
+#, php-format
+msgid "Passwort für Ihren Schlüssel für %s (nicht Stud.IP-Passwort)"
+msgstr "Password for your key for %s (not the Stud.IP password)"
+
+#: ../views/container/_user_key.php:23 ../views/userdata/create_new_key.php:20
+msgid "Passwort wiederholen"
+msgstr "Repeat password"
+
+#: ../views/container/_user_key.php:28 ../views/userdata/create_new_key.php:25
+msgid "Zur Erinnerung"
+msgstr "As a reminder"
+
+#: ../views/container/_user_key.php:29 ../views/userdata/create_new_key.php:26
+msgid ""
+"Sichere Passwörter sind in erster Regel sehr lang. Benutzen Sie auf keinen Fall Ihr Stud.IP-Passwort!"
+msgstr "Secure passwords are usually very long. Never use your Stud.IP password!"
+
+#: ../views/container/_user_key.php:41 ../views/userdata/create_new_key.php:38
+msgid "Passwort setzen"
+msgstr "Set password"
+
+#: ../views/container/_user_key.php:46
+msgid "Passwort zum Entschlüsseln eingeben"
+msgstr "Insert password for decryption"
+
+#: ../views/container/_user_key.php:49
+msgid "Falsches Passwort. Einfach nochmal probieren."
+msgstr "Wrong password. Please try again."
+
+#: ../views/container/_user_key.php:51
+msgid "Passwort zum Entschlüsseln"
+msgstr "Password for decryption"
+
+#: ../views/container/_user_key.php:55
+msgid "Entschlüsseln"
+msgstr "Decrypt"
+
+#: ../views/container/details.php:9 ../views/container/edit.php:9
+msgid ""
+"Das Dokument kann leider nicht entschlüsselt werden. Vermutlich muss es erst von jemand anderem erneut gespeichert werden, damit Sie das lesen können."
+msgstr "Unfortunately, the document cannot be decrypted. It will probably have to be saved again by someone else before you can read it."
+
+#: ../views/container/details.php:28 ../views/container/edit.php:29
+msgid "Es wird entschlüsselt ..."
+msgstr "Decryption in progress ..."
+
+#: ../views/container/details.php:28 ../views/container/edit.php:29
+msgid "Text eingeben ..."
+msgstr "Insert text ..."
+
+#: ../views/container/details.php:50
+msgid "Datei herunterladen"
+msgstr "Download file"
+
+#: ../views/container/settings.php:7
+msgid "Name des Reiters"
+msgstr "Name of the tab"
+
+#: ../views/container/settings.php:12 ../views/container/edit.php:56
+msgid "Speichern"
+msgstr "Save"
+
+#: ../views/container/index.php:11 ../views/container/edit.php:18
+msgid "Name"
+msgstr "Name"
+
+#: ../views/container/index.php:12
+msgid "Letzte Änderung"
+msgstr "Latest change"
+
+#: ../views/container/index.php:13
+msgid "Letzter Bearbeiter"
+msgstr "Latest editor"
+
+#: ../views/container/index.php:24
+msgid ""
+"Dieses Objekt muss noch einmal verschlüsselt werden, damit alle Teilnehmer*innen der Veranstaltung es sehen können."
+msgstr "This object must be encrypted once again so that all participants of the course can see it."
+
+#: ../views/container/index.php:47
+msgid "Objekt bearbeiten"
+msgstr "Edit object"
+
+#: ../views/container/index.php:54
+msgid "Objekt löschen"
+msgstr "Delete object"
+
+#: ../views/container/index.php:55
+msgid "Wirklich löschen?"
+msgstr "Really delete?"
+
+#: ../views/container/index.php:65
+msgid "Noch keine verschlüsselten Dokumente vorhanden."
+msgstr "No encrypted documents available yet."
+
+#: ../views/container/index.php:101
+msgid "Daten werden verschlüsselt ..."
+msgstr "Files beeing encrypted ..."
+
+#: ../views/container/index.php:112
+msgid "Bereich konfigurieren"
+msgstr "Configure area"
+
+#: ../views/container/index.php:119
+msgid "Text hinzufügen"
+msgstr "Insert text"
+
+#: ../views/container/index.php:126 ../views/container/edit.php:49
+msgid "Datei hochladen"
+msgstr "Upload file"
+
+#: ../views/container/index.php:134
+msgid "Dateien aktualisieren für neue Schlüssel"
+msgstr "Update files for new keys"
+
+#: ../views/container/index.php:142
+msgid "Persönlichen Schlüssel erstellen"
+msgstr "Create private key"
+
+#: ../views/container/create.php:6
+msgid "Name des Textes"
+msgstr "Name of the text"
+
+#: ../views/container/create.php:10
+msgid "Erstellen"
+msgstr "Create"
+
+#: ../views/container/edit.php:52
+msgid "Text eingeben"
+msgstr "Insert text"
+
+#: ../views/userdata/create_new_key.php:9
+msgid "Wenn Sie einen neuen Schlüssel erzeugen, müssen alle schon verschlüsselten Texte noch einmal für Sie verschlüsselt werden. damit Sie diese lesen können."
+msgstr "If you generate a new key, all texts that have already been encrypted must be encrypted again for you so that you can read them."
+
+#: ../views/userdata/create_new_key.php:16
+msgid "Passwort für Ihren neuen Schlüssel (nicht Stud.IP-Passwort)"
+msgstr "Password for your new key (not your Stud.IP password)"
+
+#: ../views/userdata/settings.php:11
+msgid "Passwort vergessen?"
+msgstr "Forgot password?"
+
+#: ../controllers/container.php:18
+msgid "Der Tresor ist ein Bereich in Ihrer Veranstaltung, der besonders gesicherte Inhalte beinhalten kann. Sie brauchen deswegen auch ein zweites Passwort nur für den Tresor. Selbst die Admins von Stud.IP sind nicht in der Lage, die Inhalte des Tresors auszulesen. Das können nur Sie und die anderen Mitlesenden der Veranstaltung."
+msgstr "The safe is an area in your course that can contain particularly secure content. Therefore, you need a second password only for the safe. Even the admins of Stud.IP are not able to read the contents of the safe. Only you and the other participants of the course can do that."
+
+#: ../controllers/container.php:20 ../controllers/userdata.php:13
+#, php-format
+msgid "Diese Seite ist nicht mit HTTPS abgesichert. %s ist so nicht sicher."
+msgstr "This page is not secured with HTTPS. %s is not secure this way."
+
+#: ../controllers/container.php:28
+msgid "Sie sind Admin und nicht Mitglied dieser Veranstaltung. Die vorliegenden Dokumente sind nicht für Sie verschlüsselt."
+msgstr "You are admin and not a member of this course. These documents are not encrypted for you."
+
+#: ../controllers/container.php:51
+#, php-format
+msgid "%s bearbeiten"
+msgstr "Edit %s"
+
+#: ../controllers/container.php:71
+msgid "Daten wurden verschlüsselt und gespeichert."
+msgstr "Files have been encrypted and saved."
+
+#: ../controllers/container.php:85
+msgid "Neuen Text initialisiert"
+msgstr "New text initialised"
+
+#: ../controllers/container.php:98
+msgid "Objekt wurde gelöscht."
+msgstr "Object deleted."
+
+#: ../controllers/container.php:151
+msgid "Daten wurden gespeichert."
+msgstr "Files saved."
+
+#: ../controllers/userdata.php:25 ../controllers/userdata.php:27
+msgid "Schlüssel erfolgreich erstellt. Vergessen Sie Ihr Passwort nicht!"
+msgstr "Key successfully created. Do not forget your password!"
+
+#: ../Tresor.class.php:54
+#, php-format
+msgid "%s Änderungen"
+msgstr "%s changes"
