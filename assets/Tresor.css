@@ -51,6 +51,13 @@
 #tresor_decrypted_preview #toolbarViewerRight {
     display: none !important; /* hide PDF viewer toolbar */
 }
+#tresor_decrypted_preview #outerContainer .visibleMediumView {
+    display: inherit;
+}
+#tresor_decrypted_preview #outerContainer .visibleLargeView, #tresor_decrypted_preview #outerContainer .visibleMediumView {
+    display: none;
+}
+
 
 .tresor_delete {
     display: inline-block;
