@@ -31,7 +31,8 @@ See https://github.com/adobe-type-tools/cmap-resources
 
       <link rel="stylesheet" href="<?= $base_url ?>/web/viewer.css">
       <style>
-          #print, #download, #viewBookmark, #openFile {
+          #print, #download, #viewBookmark, #openFile,
+          #secondaryPrint, #secondaryOpenFile, #secondaryDownload {
               display: none !important;
           }
       </style>
