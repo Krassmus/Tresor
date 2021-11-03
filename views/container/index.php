@@ -10,9 +10,9 @@ $todo = [];
     <thead>
         <tr>
             <th style="max-width: 20px;"></th>
-            <th><?= _("Name") ?></th>
-            <th><?= _("Letzte Änderung") ?></th>
-            <th><?= _("Letzter Bearbeiter") ?></th>
+            <th><?= dgettext("tresor","Name") ?></th>
+            <th><?= dgettext("tresor","Letzte Änderung") ?></th>
+            <th><?= dgettext("tresor","Letzter Bearbeiter") ?></th>
             <th class="actions"></th>
         </tr>
     </thead>
@@ -33,10 +33,10 @@ $todo = [];
                         ?>
                         <? if ($my_key['chdate'] <= $container['chdate'] && $GLOBALS['perm']->have_studip_perm("tutor", Context::get()->id)) : ?>
                             <a href="<?= PluginEngine::getURL($plugin, array('container_id' => $container->getId()), "container/update_encryption") ?>"
-                               data-confirmquestion="<?= sprintf(_("Wirklich für %s neu verschlüsseln?"), implode(", ", $whoNeedsEncryption)) ?>"
+                               data-confirmquestion="<?= sprintf(dgettext("tresor","Wirklich für %s neu verschlüsseln?"), implode(", ", $whoNeedsEncryption)) ?>"
                                onclick="STUDIP.Tresor.askForUpdatingEncryption.call(this, '<?= htmlReady($container->getId()) ?>'); return false;">
                         <? endif ?>
-                        <?= Icon::create("exclaim-circle", $my_key['chdate'] <= $container['chdate']  && $GLOBALS['perm']->have_studip_perm("tutor", Context::get()->id) ? "clickable" : "info")->asImg(20, ['class' => "text-bottom", 'title' => _("Dieses Objekt muss noch einmal verschlüsselt werden, damit alle Teilnehmer*innen der Veranstaltung es sehen können.")]) ?>
+                        <?= Icon::create("exclaim-circle", $my_key['chdate'] <= $container['chdate']  && $GLOBALS['perm']->have_studip_perm("tutor", Context::get()->id) ? "clickable" : "info")->asImg(20, ['class' => "text-bottom", 'title' => dgettext("tresor","Dieses Objekt muss noch einmal verschlüsselt werden, damit alle Teilnehmer*innen der Veranstaltung es sehen können.")]) ?>
                         <? if ($my_key['chdate'] <= $container['chdate'] && $GLOBALS['perm']->have_studip_perm("tutor", Context::get()->id)) : ?>
                             </a>
                         <? endif ?>
@@ -59,15 +59,15 @@ $todo = [];
                 <td class="actions">
                     <? if ($GLOBALS['perm']->have_studip_perm("tutor", Context::get()->id) || $container['last_user_id'] === $GLOBALS['user']->id) : ?>
                         <? if (!$GLOBALS['perm']->have_perm("admin")) : ?>
-                            <a href="<?= PluginEngine::getLink($plugin, array(), "container/edit/".$container->getId()) ?>" data-dialog title="<?= _("Objekt bearbeiten") ?>">
+                            <a href="<?= PluginEngine::getLink($plugin, array(), "container/edit/".$container->getId()) ?>" data-dialog title="<?= dgettext("tresor","Objekt bearbeiten") ?>">
                                 <?= Icon::create("edit", "clickable")->asImg(20, ['class' => "text-bottom"]) ?>
                             </a>
                         <? endif ?>
                         <form action="<?= PluginEngine::getLink($plugin, array(), "container/delete/".$container->getId()) ?>"
                               method="post"
                               class="tresor_delete">
-                            <button title="<?= _("Objekt löschen") ?>"
-                                onClick="return window.confirm('<?= _("Wirklich löschen?") ?>');">
+                            <button title="<?= dgettext("tresor","Objekt löschen") ?>"
+                                onClick="return window.confirm('<?= dgettext("tresor","Wirklich löschen?") ?>');">
                                 <?= Icon::create("trash", "clickable")->asImg("20px") ?>
                             </button>
                         </form>
@@ -77,7 +77,7 @@ $todo = [];
         <? endforeach ?>
     <? else : ?>
         <tr>
-            <td colspan="4" style="text-align: center;"><?= _("Noch keine verschlüsselten Dokumente vorhanden.") ?></td>
+            <td colspan="4" style="text-align: center;"><?= dgettext("tresor","Noch keine verschlüsselten Dokumente vorhanden.") ?></td>
         </tr>
     <? endif ?>
     </tbody>
@@ -113,7 +113,7 @@ $todo = [];
 
 <? if (count($todo) && $GLOBALS['perm']->have_studip_perm("tutor", Context::get()->id)) : ?>
     <div id="dialog_wait_renew_containers"
-         data-title="<?= _("Daten werden verschlüsselt ...") ?>"
+         data-title="<?= dgettext("tresor","Daten werden verschlüsselt ...") ?>"
          style="display: none;">
         <div class="uploadbar" style="margin-top: 20px;"></div>
     </div>
@@ -124,21 +124,21 @@ $actions = new ActionsWidget();
 if ($my_key) {
     if ($GLOBALS['perm']->have_studip_perm("tutor", Context::get()->id)) {
         $actions->addLink(
-            _("Bereich konfigurieren"),
+            dgettext("tresor","Bereich konfigurieren"),
             PluginEngine::getURL($plugin, array(), "container/settings"),
             Icon::create("admin", "clickable"),
             array('data-dialog' => "1")
         );
     }
     $actions->addLink(
-        _("Text hinzufügen"),
+        dgettext("tresor","Text hinzufügen"),
         PluginEngine::getURL($plugin, array(), "container/create"),
         Icon::create("add", "clickable"),
         array('data-dialog' => 1)
     );
     if (Config::get()->TRESOR_ACCEPT_FILETYPES !== "none") {
         $actions->addLink(
-            _("Datei hochladen"),
+            dgettext("tresor","Datei hochladen"),
             PluginEngine::getURL($plugin, array(), "container/create_file"),
             Icon::create("file+add", "clickable"),
             array('onclick' => "jQuery('#fileupload').trigger('click'); return false;")
@@ -151,19 +151,19 @@ if ($my_key) {
         }
         sort($todo);
         $actions->addLink(
-            _("Dateien aktualisieren für neue Schlüssel"),
+            dgettext("tresor","Dateien aktualisieren für neue Schlüssel"),
             PluginEngine::getURL($plugin, array(), "container/update_encryption"),
             Icon::create("refresh", "clickable"),
             array(
                 'class' => "update_encryption_confirmquestion",
                 'onclick' => "STUDIP.Tresor.askForUpdatingEncryption.call(this); return false;",
-                'data-confirmquestion' => sprintf(_("Wirklich für %s neu verschlüsseln?"), implode(", ", $todo))
+                'data-confirmquestion' => sprintf(dgettext("tresor","Wirklich für %s neu verschlüsseln?"), implode(", ", $todo))
             )
         );
     }
 } elseif(!$GLOBALS['perm']->have_perm("admin")) {
     $actions->addLink(
-        _("Persönlichen Schlüssel erstellen"),
+        dgettext("tresor","Persönlichen Schlüssel erstellen"),
         "#",
         Icon::create("key+add", "clickable"),
         array('onClick' => "STUDIP.Tresor.createUserKeys(); return false;")

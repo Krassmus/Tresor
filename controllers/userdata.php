@@ -10,7 +10,7 @@ class UserdataController extends PluginController {
         PageLayout::addScript("jquery/jquery.tablesorter-2.22.5.js");
         PageLayout::addStylesheet($this->plugin->getPluginURL()."/assets/Tresor.css");
         if (\Studip\ENV === "production" && $_SERVER['HTTPS'] !== 'on') {
-            PageLayout::postError(sprintf(_("Diese Seite ist nicht mit HTTPS abgesichert. %s ist so nicht sicher."), Config::get()->TRESOR_GLOBALS_NAME));
+            PageLayout::postError(sprintf(dgettext("tresor","Diese Seite ist nicht mit HTTPS abgesichert. %s ist so nicht sicher."), Config::get()->TRESOR_GLOBALS_NAME));
             $this->donothing = true;
         }
     }
@@ -22,9 +22,9 @@ class UserdataController extends PluginController {
             $userkey['synchronously_encrypted_private_key'] = preg_replace("/\r/", "", Request::get("private_key"));
             $userkey['public_key'] = preg_replace("/\r/", "", Request::get("public_key"));
             $userkey->store();
-            PageLayout::postMessage(MessageBox::success(_("Schlüssel erfolgreich erstellt. Vergessen Sie Ihr Passwort nicht!")));
+            PageLayout::postMessage(MessageBox::success(dgettext("tresor","Schlüssel erfolgreich erstellt. Vergessen Sie Ihr Passwort nicht!")));
         }
-        $this->render_text(MessageBox::success(_("Schlüssel erfolgreich erstellt. Vergessen Sie Ihr Passwort nicht!")));
+        $this->render_text(MessageBox::success(dgettext("tresor","Schlüssel erfolgreich erstellt. Vergessen Sie Ihr Passwort nicht!")));
     }
 
     public function settings_action() {
