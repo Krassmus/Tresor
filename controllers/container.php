@@ -1,25 +1,15 @@
 <?php
-
-require_once 'app/controllers/plugin_controller.php';
-
-class ContainerController extends PluginController
+class ContainerController extends TresorController
 {
-
     function before_filter(&$action, &$args)
     {
         parent::before_filter($action, $args);
         Navigation::activateItem("/course/tresor");
-        PageLayout::addScript($this->plugin->getPluginURL()."/assets/Tresor.js");
-        PageLayout::addScript($this->plugin->getPluginURL()."/assets/openpgp.js");
-        PageLayout::addStylesheet($this->plugin->getPluginURL()."/assets/Tresor.css");
+
         $setting = TresorSetting::find(Context::get()->id);
         $name = $setting && $setting['tabname'] ? $setting['tabname'] : Config::get()->TRESOR_GLOBALS_NAME;
         PageLayout::setTitle($name);
         Helpbar::Get()->addPlainText(Config::get()->TRESOR_GLOBALS_NAME, _("Der Tresor ist ein Bereich in Ihrer Veranstaltung, der besonders gesicherte Inhalte beinhalten kann. Sie brauchen deswegen auch ein zweites Passwort nur für den Tresor. Selbst die Admins von Stud.IP sind nicht in der Lage, die Inhalte des Tresors auszulesen. Das können nur Sie und die anderen Mitlesenden der Veranstaltung."));
-        if (\Studip\ENV === "production" && $_SERVER['HTTPS'] !== 'on') {
-            PageLayout::postError(sprintf(_("Diese Seite ist nicht mit HTTPS abgesichert. %s ist so nicht sicher."), Config::get()->TRESOR_GLOBALS_NAME));
-            $this->donothing = true;
-        }
     }
 
     public function index_action()
