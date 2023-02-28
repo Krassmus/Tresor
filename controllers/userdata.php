@@ -1,18 +1,11 @@
 <?php
 
-class UserdataController extends PluginController {
-
+class UserdataController extends TresorController
+{
     function before_filter(&$action, &$args)
     {
         parent::before_filter($action, $args);
-        PageLayout::addScript($this->plugin->getPluginURL()."/assets/Tresor.js");
-        PageLayout::addScript($this->plugin->getPluginURL()."/assets/openpgp.js");
         PageLayout::addScript("jquery/jquery.tablesorter-2.22.5.js");
-        PageLayout::addStylesheet($this->plugin->getPluginURL()."/assets/Tresor.css");
-        if (\Studip\ENV === "production" && $_SERVER['HTTPS'] !== 'on') {
-            PageLayout::postError(sprintf(_("Diese Seite ist nicht mit HTTPS abgesichert. %s ist so nicht sicher."), Config::get()->TRESOR_GLOBALS_NAME));
-            $this->donothing = true;
-        }
     }
 
     public function set_keys_action()
