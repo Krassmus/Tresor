@@ -1,6 +1,4 @@
 <?php
-require_once 'app/controllers/plugin_controller.php';
-
 abstract class TresorController extends PluginController
 {
     public function before_filter(&$action, &$args)
