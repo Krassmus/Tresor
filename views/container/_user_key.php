@@ -1,4 +1,4 @@
-<? if ($donothing) {
+<? if (!empty($donothing) {
     return;
 } ?>
 <? $my_key = TresorUserKey::findMine() ?>
