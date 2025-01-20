@@ -140,7 +140,7 @@ if ($my_key) {
         $actions->addLink(
             _("Datei hochladen"),
             PluginEngine::getURL($plugin, array(), "container/create_file"),
-            Icon::create("file+add", "clickable"),
+            Icon::create("file", "clickable"),
             array('onclick' => "jQuery('#fileupload').trigger('click'); return false;")
         );
     }
@@ -165,7 +165,7 @@ if ($my_key) {
     $actions->addLink(
         _("Persönlichen Schlüssel erstellen"),
         "#",
-        Icon::create("key+add", "clickable"),
+        Icon::create("key", "clickable"),
         array('onClick' => "STUDIP.Tresor.createUserKeys(); return false;")
     );
 }

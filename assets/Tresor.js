@@ -390,6 +390,7 @@ STUDIP.Tresor = {
                 }
                 for (let i in containers) {
                     if (containers[i].encrypted_content) {
+                        console.log(containers[i].encrypted_content);
                         STUDIP.Tresor.decryptText(containers[i].encrypted_content).then(function (plaintext) {
                             var options = {
                                 data: plaintext,     // input as String (or Uint8Array)

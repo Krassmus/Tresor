@@ -37746,7 +37746,7 @@ var FontRendererFactory = function FontRendererFactoryClosure() {
     }
 
     compileGlyphImpl() {
-      (0, _util.unreachable)("Children classes should implement this.");
+      (0, _util.unreachable)("Children lib should implement this.");
     }
 
     hasBuiltPath(unicode) {
