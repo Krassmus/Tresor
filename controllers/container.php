@@ -1,7 +1,5 @@
 <?php
 
-require_once 'app/controllers/plugin_controller.php';
-
 class ContainerController extends PluginController
 {
 
