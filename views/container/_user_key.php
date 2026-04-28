@@ -3,8 +3,8 @@
 } ?>
 <? $my_key = TresorUserKey::findMine() ?>
 <div id="my_key"
-     data-private_key="<?= htmlReady($my_key['synchronously_encrypted_private_key']) ?>"
-     data-public_key="<?= htmlReady($my_key['public_key']) ?>"></div>
+     data-private_key="<?= htmlReady($my_key['synchronously_encrypted_private_key'] ?? '') ?>"
+     data-public_key="<?= htmlReady($my_key['public_key'] ?? '') ?>"></div>
 <? if (!$my_key && !$GLOBALS['perm']->have_perm("admin")) : ?>
     <? PageLayout::postMessage(MessageBox::info(sprintf(_("Sie haben noch keinen Schlüssel für %s. %sJetzt erstellen.%s"), Config::get()->TRESOR_GLOBALS_NAME, '<a href="" onClick="STUDIP.Tresor.createUserKeys(); return false;">', '</a>'))) ?>
 

@@ -1,5 +1,6 @@
 <?php
 
+require_once __DIR__."/lib/TresorController.php";
 require_once __DIR__."/lib/TresorContainer.php";
 require_once __DIR__."/lib/TresorUserKey.php";
 require_once __DIR__."/lib/TresorSetting.php";
@@ -53,7 +54,7 @@ class Tresor extends StudIPPlugin implements StandardPlugin, SystemPlugin {
             $icon->setURL(PluginEngine::getURL($this, array('highlight' => $last_visit), "container/index"));
             $icon->setImage(Icon::create("lock-locked", "new"), array('title' => $name." - ".sprintf(_("%s Änderungen"), $new_container)));
         } else {
-            $icon->setImage(Icon::create("lock-locked", "inactive"), array('title' => $name));
+            $icon->setImage(Icon::create("lock-locked"), array('title' => $name));
         }
         return $icon;
     }
