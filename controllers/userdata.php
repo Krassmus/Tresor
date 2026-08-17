@@ -6,6 +6,10 @@ class UserdataController extends TresorController
     {
         parent::before_filter($action, $args);
         PageLayout::addScript("jquery/jquery.tablesorter-2.22.5.js");
+        if (\Studip\ENV === "production" && $_SERVER['HTTPS'] !== 'on') {
+            PageLayout::postError(sprintf(dgettext("tresor","Diese Seite ist nicht mit HTTPS abgesichert. %s ist so nicht sicher."), Config::get()->TRESOR_GLOBALS_NAME));
+            $this->donothing = true;
+        }
     }
 
     public function set_keys_action()
@@ -15,9 +19,9 @@ class UserdataController extends TresorController
             $userkey['synchronously_encrypted_private_key'] = preg_replace("/\r/", "", Request::get("private_key"));
             $userkey['public_key'] = preg_replace("/\r/", "", Request::get("public_key"));
             $userkey->store();
-            PageLayout::postMessage(MessageBox::success(_("Schlüssel erfolgreich erstellt. Vergessen Sie Ihr Passwort nicht!")));
+            PageLayout::postMessage(MessageBox::success(dgettext("tresor","Schlüssel erfolgreich erstellt. Vergessen Sie Ihr Passwort nicht!")));
         }
-        $this->render_text(MessageBox::success(_("Schlüssel erfolgreich erstellt. Vergessen Sie Ihr Passwort nicht!")));
+        $this->render_text(MessageBox::success(dgettext("tresor","Schlüssel erfolgreich erstellt. Vergessen Sie Ihr Passwort nicht!")));
     }
 
     public function settings_action() {
