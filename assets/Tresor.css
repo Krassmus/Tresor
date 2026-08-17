@@ -47,6 +47,12 @@
     height: 600px;
     border: none;
 }
+img#tresor_decrypted_preview {
+    max-width: 100%;
+    width: auto;
+    max-height: 600px;
+    border: none;
+}
 
 #tresor_decrypted_preview #toolbarViewerRight {
     display: none !important; /* hide PDF viewer toolbar */
