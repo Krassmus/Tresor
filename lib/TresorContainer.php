@@ -4,7 +4,12 @@ class TresorContainer extends SimpleORMap {
 
     static public function getDataPath()
     {
-        return $GLOBALS['STUDIP_BASE_PATH'] . "/data/tresor";
+        $path = Config::get()->TRESOR_DATA_PATH;
+        if ($path) {
+            return $path;
+        } else {
+            return $GLOBALS['STUDIP_BASE_PATH'] . "/data/tresor";
+        }
     }
 
     protected static function configure($config = array())
