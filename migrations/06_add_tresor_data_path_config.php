@@ -1,6 +1,6 @@
 <?php
 
-class AddTresorDataPath extends Migration {
+class AddTresorDataPathConfig extends Migration {
 
 	public function up() {
         Config::get()->create("TRESOR_DATA_PATH", array(
